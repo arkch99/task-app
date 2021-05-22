@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
-import uniqid from 'uniqid';
 
 class Overview extends Component {	
 	render(){	
-		const taskItems = this.props.tasks.map((task) => <li key={uniqid()}>{task}</li>);
+		let c = 1;
+		const taskItems = this.props.tasks.map((task) => {
+			return (
+				<span>
+					<li key={task.id}>{`${c++}: ${task.text}`}</li>
+					<button type="button" value={task.id}>Delete</button>
+				</span>
+			);	
+		});
+		
 		return (
 			<div>
 				<ul>
