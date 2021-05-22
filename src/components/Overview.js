@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
-//import ReactDOM from 'react-dom';
+import uniqid from 'uniqid';
 
-class Overview extends Component {
-	constructor(){
-		super();
-		this.state = {
-			tasks:[]
-		};
-	}
+class Overview extends Component {	
 	render(){	
-		const taskItems = this.state.tasks.map((task) => <li key={task}>{task}</li>);
+		const taskItems = this.props.tasks.map((task) => <li key={uniqid()}>{task}</li>);
 		return (
 			<div>
 				<ul>
