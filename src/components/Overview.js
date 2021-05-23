@@ -7,7 +7,12 @@ class Overview extends Component {
 			return (
 				<span>
 					<li key={task.id}>{`${c++}: ${task.text}`}</li>
-					<button type="button" value={task.id}>Delete</button>
+					<button 
+						type="button" 
+						value={task.id} 
+						onClick={this.props.delhandler}>
+							Delete
+					</button>
 				</span>
 			);	
 		});

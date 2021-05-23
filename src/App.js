@@ -11,6 +11,22 @@ class App extends Component {
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
+		this.handleDelete = this.handleDelete.bind(this);
+	}
+
+	handleDelete(event){
+		event.preventDefault();
+		const idToDelete = event.target.value;
+		const delPos = this.state.tasks.findIndex((task) => {
+			if(task.id === idToDelete){
+				return true;
+			}
+			return false;
+		});
+		const newArr = this.state.tasks.slice(0, delPos).concat(this.state.tasks.slice(delPos + 1));
+		this.setState({
+			tasks: newArr
+		});
 	}
 
 	handleChange(event){
@@ -44,7 +60,7 @@ class App extends Component {
 				<input type="text" id="task-field" onChange={this.handleChange}/>
 				<button id="submit-btn">Submit</button>
 			</form>
-			<Overview tasks={this.state.tasks}/>
+			<Overview tasks={this.state.tasks} delhandler={this.handleDelete}/>
 		</div>
 		);
   	}
