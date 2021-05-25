@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import Overview from "./components/Overview";
+import Overview from "./components/TaskList";
+import ProjectPane from "./components/ProjectPane";
 import uniqid from 'uniqid';
 
 class App extends Component {
@@ -7,11 +8,15 @@ class App extends Component {
 		super();
 		this.state = {
 			tasks: [],
+			projects:[], 
 			typedVal: ""
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleDelete = this.handleDelete.bind(this);
+		this.handleProjSel = this.handleProjSel.bind(this);
+		this.handleTaskEdit = this.handleTaskEdit.bind(this);
+		this.handleCheck = this.handleCheck.bind(this);
 	}
 
 	handleDelete(event){
@@ -52,7 +57,46 @@ class App extends Component {
 		event.preventDefault();
 	}
 
-	
+	handleTaskEdit(event){
+		const mode = {"Save":false, "Edit":true};
+		const btnText = {"Edit":"Save", "Save":"Edit"};
+
+		const taskId = event.target.value;
+		const taskEle = document.getElementById(taskId).children[1];
+		const buttonLabel = event.target.textContent;
+
+		taskEle.contentEditable = mode[buttonLabel];
+		event.target.textContent = btnText[buttonLabel];
+
+		if(!taskEle.contentEditable){ // if save button has been pressed
+			const changedTaskPos = this.state.findIndex((task) => {
+				if(task.id === taskId)
+				{
+					return true;
+				}
+				return false;
+			});
+			const changedTask = {
+				id: taskId,
+				text: taskEle.textContent
+			}
+			const newTaskArr = this.state.tasks.slice(0, changedTaskPos).concat(changedTask).concat(this.state.tasks.slice(changedTaskPos + 1));
+			this.setState({
+				tasks:newTaskArr
+			});
+		}
+
+	}
+
+	handleCheck(event){
+		alert("placeholder checkbox");
+	}
+
+	handleProjSel(event){
+		alert("placeholder project sel");
+	}
+
+
 	render(){
 		return (
 		<div className="App">   
@@ -60,7 +104,8 @@ class App extends Component {
 				<input type="text" id="task-field" onChange={this.handleChange}/>
 				<button id="submit-btn">Submit</button>
 			</form>
-			<Overview tasks={this.state.tasks} delhandler={this.handleDelete}/>
+			<ProjectPane projects={this.state.projects} projSelHandler={this.handleProjSel}/>
+			<Overview tasks={this.state.tasks} delhandler={this.handleDelete} edithandler={this.handleTaskEdit} checkhandler={this.handleCheck}/>
 		</div>
 		);
   	}
