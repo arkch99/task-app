@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Overview from "./components/TaskList";
 import ProjectPane from "./components/ProjectPane";
+import "./index.css";
 import uniqid from 'uniqid';
 
 class App extends Component {
@@ -8,7 +9,7 @@ class App extends Component {
 		super();
 		this.state = {
 			tasks: [],
-			projects:[], 
+			projects:[{id:"default", name:"Unclassified"}], 
 			typedVal: ""
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -98,14 +99,28 @@ class App extends Component {
 
 
 	render(){
+		const projList = this.state.projects.map(proj => <option value={proj.id}> {proj.name}</option>);
 		return (
-		<div className="App">   
-			<form onSubmit={this.handleSubmit}>
-				<input type="text" id="task-field" onChange={this.handleChange}/>
-				<button id="submit-btn">Submit</button>
-			</form>
-			<ProjectPane projects={this.state.projects} projSelHandler={this.handleProjSel}/>
-			<Overview tasks={this.state.tasks} delhandler={this.handleDelete} edithandler={this.handleTaskEdit} checkhandler={this.handleCheck}/>
+		<div className="App">
+			<div className="side-pane-wrapper">
+				<ProjectPane projects={this.state.projects} projSelHandler={this.handleProjSel}/>
+			</div>
+			<div className="content">				
+				<form onSubmit={this.handleSubmit}>
+					<span id="input-field">
+						<input type="text" id="task-field" onChange={this.handleChange}/>
+						<button id="submit-btn">Submit</button>
+					</span>
+					<div className="new-task-btns">
+						<label for="proj-sel">Project:</label>
+						<select name="proj-sel" id="proj-sel-menu">
+							{projList}
+						</select>						
+					</div>
+					
+				</form>
+				<Overview tasks={this.state.tasks} delhandler={this.handleDelete} edithandler={this.handleTaskEdit} checkhandler={this.handleCheck}/>
+			</div>			
 		</div>
 		);
   	}

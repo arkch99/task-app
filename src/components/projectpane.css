@@ -1,0 +1,29 @@
+.side-pane{
+	display: flex;
+	align-content: stretch;			
+	border-right: 2px solid;
+	height: 100vw;	
+	flex-direction: column;		
+}
+
+.proj-list-wrapper{
+	height: 100vw;
+}
+
+.proj-list{
+	flex-grow: 2;
+	
+}
+
+.proj-btns{		
+	display: flex;
+	flex-basis: 5%;
+	flex-grow: 1;
+	border-bottom: 2px solid;
+	justify-content: center;
+	align-content: center;
+}
+
+.proj-btns button{
+	height: 60%;
+}
