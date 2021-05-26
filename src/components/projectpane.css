@@ -19,11 +19,19 @@
 	display: flex;
 	flex-basis: 5%;
 	flex-grow: 1;
-	border-bottom: 2px solid;
+	/* border-bottom: 2px solid; */
 	justify-content: center;
 	align-content: center;
 }
 
 .proj-btns button{
 	height: 60%;
+}
+
+.proj-controls-wrapper{
+	border-bottom: 2px solid;
+}
+
+.proj-input-wrapper{
+	display: none;
 }

@@ -18,6 +18,9 @@ class App extends Component {
 		this.handleProjSel = this.handleProjSel.bind(this);
 		this.handleTaskEdit = this.handleTaskEdit.bind(this);
 		this.handleCheck = this.handleCheck.bind(this);
+		this.handleNewProj = this.handleNewProj.bind(this);
+		this.handleProjDel = this.handleProjDel.bind(this);
+		this.handleNewProjSubmit = this.handleNewProjSubmit.bind(this);
 	}
 
 	handleDelete(event){
@@ -97,13 +100,43 @@ class App extends Component {
 		alert("placeholder project sel");
 	}
 
+	handleNewProj(event){
+		event.target.disabled = true;
+		document.getElementsByClassName("proj-input-wrapper")[0].style.display="block";
+		// console.log()
+	}
+
+	handleNewProjSubmit(event){
+		event.preventDefault();
+		const ip = document.getElementById("proj-name-input")
+		const projName = ip.value;
+		const newProj = { 
+			id: uniqid(),
+			name:projName 
+		};
+		this.setState(prevState => ({
+			projects: [...prevState.projects, newProj]
+		}));
+		ip.value = "";
+		document.getElementsByClassName("proj-input-wrapper")[0].style.display="none";
+		document.getElementById("new-proj-btn").disabled = false;
+	}
+
+	handleProjDel(event){
+		alert("placeholder project delete");
+
+	}
+
 
 	render(){
 		const projList = this.state.projects.map(proj => <option value={proj.id}> {proj.name}</option>);
 		return (
 		<div className="App">
 			<div className="side-pane-wrapper">
-				<ProjectPane projects={this.state.projects} projSelHandler={this.handleProjSel}/>
+				<ProjectPane projects={this.state.projects}
+							 projSelHandler={this.handleProjSel} 
+							 newprojhandler={this.handleNewProj}
+							 newprojsubmithandler={this.handleNewProjSubmit}/>
 			</div>
 			<div className="content">				
 				<form onSubmit={this.handleSubmit}>
