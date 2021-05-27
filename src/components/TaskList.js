@@ -30,6 +30,7 @@ class Overview extends Component {
 		
 		return (
 			<div>
+				<h1>Project '{this.props.selProjName}' selected</h1>
 				<ul>
 					{taskItems}
 				</ul>

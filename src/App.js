@@ -10,6 +10,7 @@ class App extends Component {
 		this.state = {
 			tasks: [],
 			projects:[{id:"default", name:"Unclassified"}], 
+			selectedProj: "default",
 			typedVal: ""
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -46,8 +47,10 @@ class App extends Component {
 
 	handleSubmit(event){
 		const ip = document.getElementById("task-field");
+		const projId = document.getElementById("proj-sel-menu").value;
 		const newTask = {
 			id:uniqid(), 
+			projectId: projId,
 			text:this.state.typedVal
 		};
 		console.log(newTask);
@@ -97,7 +100,10 @@ class App extends Component {
 	}
 
 	handleProjSel(event){
-		alert("placeholder project sel");
+		const projId = event.target.id;		
+		this.setState({
+			selectedProj: projId
+		});
 	}
 
 	handleNewProj(event){
@@ -130,13 +136,27 @@ class App extends Component {
 
 	render(){
 		const projList = this.state.projects.map(proj => <option value={proj.id}> {proj.name}</option>);
+		let tasksInProject = this.state.tasks;
+		let projName = "all";
+		if(this.state.selectedProj !== "all"){
+			tasksInProject = this.state.tasks.filter(task => {
+				if(task.projectId === this.state.selectedProj){
+					return true;
+				}
+				return false;
+			});
+			projName = this.state.projects.find(proj => proj.id === this.state.selectedProj).name;
+		}
+		
 		return (
 		<div className="App">
 			<div className="side-pane-wrapper">
-				<ProjectPane projects={this.state.projects}
-							 projSelHandler={this.handleProjSel} 
-							 newprojhandler={this.handleNewProj}
-							 newprojsubmithandler={this.handleNewProjSubmit}/>
+				<ProjectPane 
+					projects={this.state.projects}
+					projSelHandler={this.handleProjSel} 
+					newprojhandler={this.handleNewProj}
+					newprojsubmithandler={this.handleNewProjSubmit}
+				/>
 			</div>
 			<div className="content">				
 				<form onSubmit={this.handleSubmit}>
@@ -152,7 +172,13 @@ class App extends Component {
 					</div>
 					
 				</form>
-				<Overview tasks={this.state.tasks} delhandler={this.handleDelete} edithandler={this.handleTaskEdit} checkhandler={this.handleCheck}/>
+				<Overview 
+					tasks={tasksInProject} 
+					selProjName={projName}
+					delhandler={this.handleDelete} 
+					edithandler={this.handleTaskEdit} 
+					checkhandler={this.handleCheck}
+				/>
 			</div>			
 		</div>
 		);

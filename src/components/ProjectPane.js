@@ -3,7 +3,8 @@ import './projectpane.css';
 
 class ProjectPane extends Component {	
 	render(){
-		const projList = this.props.projects.map((project) => <li className="project-item" key={project.id} value={project.id} onClick={this.props.projSelHandler}>{project.name}</li>);
+		const projList = this.props.projects.map((project) => <li className="project-item" key={project.id} id={project.id} onClick={this.props.projSelHandler}>{project.name}</li>);
+
 		return(
 			<div className="side-pane">
 				<div className="proj-controls-wrapper">
@@ -20,6 +21,7 @@ class ProjectPane extends Component {
 				</div>
 				<div className="proj-list-wrapper">
 					<ul className="proj-list">
+						<li className="project-item" key="all" id="all" onClick={this.props.projSelHandler}>All</li>
 						{projList}
 					</ul>
 				</div>				

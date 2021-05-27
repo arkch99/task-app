@@ -35,3 +35,7 @@
 .proj-input-wrapper{
 	display: none;
 }
+
+.project-item:hover{
+	color: blue;
+}
