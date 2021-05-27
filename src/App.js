@@ -11,8 +11,9 @@ class App extends Component {
 			tasks: [],
 			projects:[{id:"default", name:"Unclassified"}], 
 			selectedProj: "default",
-			typedVal: ""
-		}
+			typedVal: "",
+			delEnabled: true
+		}		
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleDelete = this.handleDelete.bind(this);
@@ -104,6 +105,17 @@ class App extends Component {
 		this.setState({
 			selectedProj: projId
 		});
+		//const delbtn = document.getElementById("del-proj-btn");
+		if(projId === "default" || projId === "all"){
+			this.setState({
+				delEnabled: true
+			});
+		}
+		else{
+			this.setState({
+				delEnabled: false
+			});
+		}
 	}
 
 	handleNewProj(event){
@@ -129,8 +141,30 @@ class App extends Component {
 	}
 
 	handleProjDel(event){
-		alert("placeholder project delete");
+		const projToDelete = this.state.selectedProj;
+		console.log(projToDelete);
+		const projPos = this.state.projects.findIndex(project => {
+			if(project.id === projToDelete){
+				return true;
+			}
+			return false;
+		});
+		const newProjArr = this.state.projects.slice(0, projPos).concat(this.state.projects.slice(projPos + 1));
 
+		const taskArr = [];
+		this.state.tasks.forEach(task => {
+			if(task.projectId === projToDelete){
+				task.projectId = "default";
+			}
+			taskArr.push(task);
+		})
+
+		this.setState({
+			tasks: taskArr,
+			projects: newProjArr,
+			selectedProj: "default"
+		});
+		
 	}
 
 
@@ -156,6 +190,8 @@ class App extends Component {
 					projSelHandler={this.handleProjSel} 
 					newprojhandler={this.handleNewProj}
 					newprojsubmithandler={this.handleNewProjSubmit}
+					projdelhandler={this.handleProjDel}
+					delEnabled={this.state.delEnabled}
 				/>
 			</div>
 			<div className="content">				

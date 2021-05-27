@@ -10,7 +10,12 @@ class ProjectPane extends Component {
 				<div className="proj-controls-wrapper">
 					<div className="proj-btns">
 						<button type="button" id="new-proj-btn" onClick={this.props.newprojhandler}>New Project</button>
-						<button type="button" id="del-proj-btn" onClick={this.props.projdelhandler}>Delete</button>
+						<button type="button" 
+							id="del-proj-btn" 
+							disabled={this.props.delEnabled}
+							onClick={this.props.projdelhandler}>
+								Delete
+						</button>
 					</div>
 					<div className="proj-input-wrapper">
 						<form onSubmit={this.props.newprojsubmithandler}>
