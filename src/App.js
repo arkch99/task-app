@@ -52,6 +52,7 @@ class App extends Component {
 		const newTask = {
 			id:uniqid(), 
 			projectId: projId,
+			done: false,
 			text:this.state.typedVal
 		};
 		console.log(newTask);
@@ -97,7 +98,19 @@ class App extends Component {
 	}
 
 	handleCheck(event){
-		alert("placeholder checkbox");
+		const checkedTaskId = event.target.value;
+		const taskIndex =  this.state.tasks.findIndex(task => {return (task.id === checkedTaskId) ? true : false});
+		const checkedTask = this.state.tasks[taskIndex];
+		const newTask = {
+			id: checkedTask.id,
+			projectId: checkedTask.projectId,
+			done: !checkedTask.done,
+			text: checkedTask.text
+		};
+		const newTaskArr = this.state.tasks.slice(0, taskIndex).concat(newTask).concat(this.state.tasks.slice(taskIndex + 1));
+		this.setState({
+			tasks: newTaskArr
+		});
 	}
 
 	handleProjSel(event){

@@ -4,11 +4,15 @@ import "./tasklist.css";
 class Overview extends Component {	
 	render(){	
 		let c = 1;
+		const strikethrough = {
+			true:"line-through",
+			false:"none"
+		}
 		const taskItems = this.props.tasks.map((task) => {
 			return (
-				<span>
-					<input type="checkbox" value={task.id} onClick={this.props.checkhandler}/>
-					<li id={task.id} key={task.id}>
+				<span className="todo-item">
+					<input type="checkbox" value={task.id} onClick={this.props.checkhandler} checked={task.done?true:false}/>
+					<li id={task.id} key={task.id} style={{textDecoration: strikethrough[task.done]}}>
 						<span className="task-number">{`${c++}:`}</span> 
 						<span className="task-text">{`${task.text}`}</span>
 					</li>
@@ -31,7 +35,7 @@ class Overview extends Component {
 		return (
 			<div>
 				<h1>Project '{this.props.selProjName}' selected</h1>
-				<ul>
+				<ul className="todo-list">
 					{taskItems}
 				</ul>
 			</div>

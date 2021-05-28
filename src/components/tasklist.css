@@ -1,0 +1,7 @@
+.todo-item{
+	display: flex;
+}
+
+.todo-list{
+	list-style-type: none;
+}
