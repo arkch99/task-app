@@ -12,7 +12,8 @@ class App extends Component {
 			projects:[{id:"default", name:"Unclassified"}], 
 			selectedProj: "default",
 			typedVal: "",
-			delEnabled: true
+			delEnabled: true,
+			editedTask: "none"
 		}		
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -68,30 +69,39 @@ class App extends Component {
 
 	handleTaskEdit(event){
 		const mode = {"Save":false, "Edit":true};
-		const btnText = {"Edit":"Save", "Save":"Edit"};
+		const btnText = {"Edit":"Save", "Save":"Edit"};		
 
 		const taskId = event.target.value;
-		const taskEle = document.getElementById(taskId).children[1];
-		const buttonLabel = event.target.textContent;
+		const taskEle = document.getElementById(taskId).children[1]; // get the actual text, not the number
+		const buttonLabel = event.target.textContent; // what's on the edit button
 
 		taskEle.contentEditable = mode[buttonLabel];
-		event.target.textContent = btnText[buttonLabel];
+		event.target.textContent = btnText[buttonLabel]; // change text on edit/save button
 
-		if(!taskEle.contentEditable){ // if save button has been pressed
-			const changedTaskPos = this.state.findIndex((task) => {
-				if(task.id === taskId)
-				{
-					return true;
-				}
-				return false;
-			});
+		console.log(typeof taskEle.contentEditable);
+		console.log(taskEle.contentEditable);
+
+		if(taskEle.contentEditable==='false'){ // if save button has been pressed
+			console.log(`Save pressed on ${taskId}`);
+			const changedTaskPos = this.state.tasks.findIndex((task) => {return task.id === taskId});			
+			const newProj = document.getElementById(`${taskId}-proj-edit-sel-menu`).value;
+			console.log(newProj);
 			const changedTask = {
 				id: taskId,
-				text: taskEle.textContent
-			}
+				projectId: newProj,
+				text: taskEle.textContent,				
+			};
+			
 			const newTaskArr = this.state.tasks.slice(0, changedTaskPos).concat(changedTask).concat(this.state.tasks.slice(changedTaskPos + 1));
 			this.setState({
-				tasks:newTaskArr
+				tasks:newTaskArr,
+				editedTask: "none"
+			});
+		}
+		else{
+			console.log(`Edit pressed on ${taskId}`);
+			this.setState({
+				editedTask: taskId
 			});
 		}
 
@@ -118,8 +128,7 @@ class App extends Component {
 		this.setState({
 			selectedProj: projId
 		});
-		//const delbtn = document.getElementById("del-proj-btn");
-		if(projId === "default" || projId === "all"){
+		if(projId === "default" || projId === "all"){ // prevent deletion of unclassified and all
 			this.setState({
 				delEnabled: true
 			});
@@ -134,7 +143,6 @@ class App extends Component {
 	handleNewProj(event){
 		event.target.disabled = true;
 		document.getElementsByClassName("proj-input-wrapper")[0].style.display="block";
-		// console.log()
 	}
 
 	handleNewProjSubmit(event){
@@ -156,12 +164,7 @@ class App extends Component {
 	handleProjDel(event){
 		const projToDelete = this.state.selectedProj;
 		console.log(projToDelete);
-		const projPos = this.state.projects.findIndex(project => {
-			if(project.id === projToDelete){
-				return true;
-			}
-			return false;
-		});
+		const projPos = this.state.projects.findIndex(project => {return project.id === projToDelete});		
 		const newProjArr = this.state.projects.slice(0, projPos).concat(this.state.projects.slice(projPos + 1));
 
 		const taskArr = [];
@@ -180,18 +183,12 @@ class App extends Component {
 		
 	}
 
-
 	render(){
-		const projList = this.state.projects.map(proj => <option value={proj.id}> {proj.name}</option>);
+		const projList = this.state.projects.map(proj => <option key={proj.id} value={proj.id}> {proj.name}</option>);
 		let tasksInProject = this.state.tasks;
 		let projName = "all";
 		if(this.state.selectedProj !== "all"){
-			tasksInProject = this.state.tasks.filter(task => {
-				if(task.projectId === this.state.selectedProj){
-					return true;
-				}
-				return false;
-			});
+			tasksInProject = this.state.tasks.filter(task => {return task.projectId === this.state.selectedProj});			
 			projName = this.state.projects.find(proj => proj.id === this.state.selectedProj).name;
 		}
 		
@@ -214,7 +211,7 @@ class App extends Component {
 						<button id="submit-btn">Submit</button>
 					</span>
 					<div className="new-task-btns">
-						<label for="proj-sel">Project:</label>
+						<label htmlFor="proj-sel">Project:</label>
 						<select name="proj-sel" id="proj-sel-menu">
 							{projList}
 						</select>						
@@ -223,7 +220,9 @@ class App extends Component {
 				</form>
 				<Overview 
 					tasks={tasksInProject} 
-					selProjName={projName}
+					projects={this.state.projects}
+					selProjName={projName}		
+					editedTask={this.state.editedTask}
 					delhandler={this.handleDelete} 
 					edithandler={this.handleTaskEdit} 
 					checkhandler={this.handleCheck}

@@ -1,35 +1,24 @@
 import React, { Component } from 'react';
+import TaskItem from './TaskItem';
 import "./tasklist.css";
 
 class Overview extends Component {	
 	render(){	
 		let c = 1;
-		const strikethrough = {
-			true:"line-through",
-			false:"none"
-		}
+		const projList = this.props.projects.map(proj => <option key={proj.id} value={proj.id}> {proj.name}</option>);		
+
 		const taskItems = this.props.tasks.map((task) => {
 			return (
-				<span className="todo-item">
-					<input type="checkbox" value={task.id} onClick={this.props.checkhandler} checked={task.done?true:false}/>
-					<li id={task.id} key={task.id} style={{textDecoration: strikethrough[task.done]}}>
-						<span className="task-number">{`${c++}:`}</span> 
-						<span className="task-text">{`${task.text}`}</span>
-					</li>
-					<button 
-						type="button" 
-						value={task.id} 
-						onClick={this.props.edithandler}>
-							Edit
-					</button>
-					<button 
-						type="button" 
-						value={task.id} 
-						onClick={this.props.delhandler}>
-							Delete
-					</button>
-				</span>
-			);	
+				<TaskItem 
+					projList={projList} 
+					task={task} 
+					taskNo={c++} 
+					edithandler={this.props.edithandler}
+					checkhandler={this.props.checkhandler}
+					delhandler={this.props.delhandler}
+					edit={task.id === this.props.editedTask}
+				/>
+			);
 		});
 		
 		return (

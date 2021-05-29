@@ -5,3 +5,7 @@
 .todo-list{
 	list-style-type: none;
 }
+
+.proj-edit-wrapper{
+	display: none;
+}
