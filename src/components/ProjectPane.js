@@ -1,15 +1,29 @@
 import React, { Component } from 'react';
+import ProjectItem from './ProjectItem';
 import './projectpane.css';
 
 class ProjectPane extends Component {	
 	render(){
-		const projList = this.props.projects.map((project) => <li className="project-item" key={project.id} id={project.id} onClick={this.props.projSelHandler}>{project.name}</li>);
+		const projList = this.props.projects.map((project) => <ProjectItem 
+			key={project.id} 
+			project={project} 
+			projSelHandler={this.props.projSelHandler} 
+			edithandler={this.props.projEditHandler} 
+			edit={(project.id === this.props.editedProject) && (project.id !== "none")} 
+		/>);
 
 		return(
 			<div className="side-pane">
 				<div className="proj-controls-wrapper">
 					<div className="proj-btns">
-						<button type="button" id="new-proj-btn" onClick={this.props.newprojhandler}>New Project</button>
+						<button 
+							type="button" 
+							id="new-proj-btn" 
+							onClick={this.props.newprojhandler}
+						>
+							New Project
+						</button>
+						
 						<button type="button" 
 							id="del-proj-btn" 
 							disabled={this.props.delEnabled}
@@ -26,7 +40,14 @@ class ProjectPane extends Component {
 				</div>
 				<div className="proj-list-wrapper">
 					<ul className="proj-list">
-						<li className="project-item" key="all" id="all" onClick={this.props.projSelHandler}>All</li>
+						<li 
+							className="project-item" 
+							key="all" 
+							id="all" 
+							onClick={this.props.projSelHandler}
+						>
+								All
+						</li>
 						{projList}
 					</ul>
 				</div>				

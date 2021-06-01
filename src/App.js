@@ -13,7 +13,8 @@ class App extends Component {
 			selectedProj: "default",
 			typedVal: "",
 			delEnabled: true,
-			editedTask: "none"
+			editedTask: "none",
+			editedProject: "none"
 		}		
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -24,6 +25,7 @@ class App extends Component {
 		this.handleNewProj = this.handleNewProj.bind(this);
 		this.handleProjDel = this.handleProjDel.bind(this);
 		this.handleNewProjSubmit = this.handleNewProjSubmit.bind(this);
+		this.handleProjEdit = this.handleProjEdit.bind(this);
 	}
 
 	handleDelete(event){
@@ -124,7 +126,9 @@ class App extends Component {
 	}
 
 	handleProjSel(event){
+		console.log("Project clicked!");
 		const projId = event.target.id;		
+		console.log(`Name: ${event.target.textContent}\nid: ${projId}`);
 		this.setState({
 			selectedProj: projId
 		});
@@ -183,11 +187,39 @@ class App extends Component {
 		
 	}
 
+	handleProjEdit(event){
+		const editedProject = event.target.value;		
+		// const mode = {"Save":false, "Edit":true};
+		const btnText = event.target.textContent;
+
+		if(btnText === "Edit"){
+			this.setState({
+				editedProject: editedProject
+			});
+		}
+		else {
+			const newProjName = document.getElementById(editedProject).textContent;
+			const editedProjPosn = this.state.projects.findIndex((project => project.id === editedProject));
+			const newProj = {
+				id: editedProject,
+				name: newProjName
+			};
+			const newProjArr = this.state.projects.slice(0, editedProjPosn).concat(newProj).concat(this.state.projects.slice(editedProjPosn + 1));
+			this.setState({
+				editedProject: "none",
+				projects: newProjArr
+			});
+			console.log(this.state.projects);
+		}
+
+	}
+
 	render(){
 		const projList = this.state.projects.map(proj => <option key={proj.id} value={proj.id}> {proj.name}</option>);
 		let tasksInProject = this.state.tasks;
 		let projName = "all";
 		if(this.state.selectedProj !== "all"){
+			// console.log(this.state.projects);
 			tasksInProject = this.state.tasks.filter(task => {return task.projectId === this.state.selectedProj});			
 			projName = this.state.projects.find(proj => proj.id === this.state.selectedProj).name;
 		}
@@ -202,6 +234,8 @@ class App extends Component {
 					newprojsubmithandler={this.handleNewProjSubmit}
 					projdelhandler={this.handleProjDel}
 					delEnabled={this.state.delEnabled}
+					editedProject={this.state.editedProject}
+					projEditHandler={this.handleProjEdit}
 				/>
 			</div>
 			<div className="content">				
