@@ -52,10 +52,12 @@ class App extends Component {
 	handleSubmit(event){
 		const ip = document.getElementById("task-field");
 		const projId = document.getElementById("proj-sel-menu").value;
+		const dueDate = document.getElementById("task-submit-date").value;
 		const newTask = {
 			id:uniqid(), 
 			projectId: projId,
 			done: false,
+			dueDate: dueDate,
 			text:this.state.typedVal
 		};
 		console.log(newTask);
@@ -248,7 +250,9 @@ class App extends Component {
 						<label htmlFor="proj-sel">Project:</label>
 						<select name="proj-sel" id="proj-sel-menu">
 							{projList}
-						</select>						
+						</select>		
+						<label htmlFor="task-submit-date">Due Date:</label>
+						<input type="date" name="task-submit-date" id="task-submit-date"/>
 					</div>
 					
 				</form>

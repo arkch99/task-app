@@ -9,3 +9,7 @@
 .proj-edit-wrapper{
 	display: none;
 }
+
+.task-date-due{
+	color:red;
+}

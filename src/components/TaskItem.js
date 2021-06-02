@@ -10,7 +10,9 @@ class TaskItem extends Component{
 
 		const editDisplay = !this.props.edit ? "none": "block";
 		const editOrSave = !this.props.edit ? "Edit": "Save";
-
+		const today = new Date().toISOString().slice(0, 10);		
+		const isOverDue = this.props.task.dueDate < today;
+		
 		return (
 		<span key={this.props.task.id} className="todo-item">
 			<input 
@@ -27,6 +29,7 @@ class TaskItem extends Component{
 			>
 				<span className="task-number">{`${this.props.taskNo}:`}</span> 
 				<span className="task-text">{`${this.props.task.text}`}</span>
+				<span className={isOverDue ? "task-date-due" : "task-date-ok"}>{this.props.task.dueDate}</span>
 			</li>
 			<div 
 				className="proj-edit-wrapper" 
