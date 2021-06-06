@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Overview from "./components/TaskList";
 import ProjectPane from "./components/ProjectPane";
 import "./index.css";
+import Container from '@material-ui/core/Container';
+import Drawer from '@material-ui/core/Drawer';
 import uniqid from 'uniqid';
 
 class App extends Component {
@@ -14,7 +16,8 @@ class App extends Component {
 			typedVal: "",
 			delEnabled: true,
 			editedTask: "none",
-			editedProject: "none"
+			editedProject: "none",
+			newProjInput: false
 		}		
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -76,7 +79,7 @@ class App extends Component {
 		const btnText = {"Edit":"Save", "Save":"Edit"};		
 
 		const taskId = event.target.value;
-		const taskEle = document.getElementById(taskId).children[1]; // get the actual text, not the number
+		const taskEle = document.getElementById(taskId);//.children[1]; // get the actual text, not the number
 		const buttonLabel = event.target.textContent; // what's on the edit button
 
 		taskEle.contentEditable = mode[buttonLabel];
@@ -148,7 +151,9 @@ class App extends Component {
 
 	handleNewProj(event){
 		event.target.disabled = true;
-		document.getElementsByClassName("proj-input-wrapper")[0].style.display="block";
+		this.setState({
+			newProjInput: true
+		});
 	}
 
 	handleNewProjSubmit(event){
@@ -160,10 +165,10 @@ class App extends Component {
 			name:projName 
 		};
 		this.setState(prevState => ({
-			projects: [...prevState.projects, newProj]
+			projects: [...prevState.projects, newProj],
+			newProjInput: false
 		}));
 		ip.value = "";
-		document.getElementsByClassName("proj-input-wrapper")[0].style.display="none";
 		document.getElementById("new-proj-btn").disabled = false;
 	}
 
@@ -229,43 +234,48 @@ class App extends Component {
 		return (
 		<div className="App">
 			<div className="side-pane-wrapper">
-				<ProjectPane 
-					projects={this.state.projects}
-					projSelHandler={this.handleProjSel} 
-					newprojhandler={this.handleNewProj}
-					newprojsubmithandler={this.handleNewProjSubmit}
-					projdelhandler={this.handleProjDel}
-					delEnabled={this.state.delEnabled}
-					editedProject={this.state.editedProject}
-					projEditHandler={this.handleProjEdit}
-				/>
+				<Drawer variant="permanent" open={true}>					
+					<ProjectPane 
+						projects={this.state.projects}
+						projSelHandler={this.handleProjSel} 
+						newprojhandler={this.handleNewProj}
+						newprojsubmithandler={this.handleNewProjSubmit}
+						projdelhandler={this.handleProjDel}
+						delEnabled={this.state.delEnabled}
+						editedProject={this.state.editedProject}
+						projEditHandler={this.handleProjEdit}
+						newProjInput = {this.state.newProjInput}
+					/>
+				</Drawer>
 			</div>
-			<div className="content">				
-				<form onSubmit={this.handleSubmit}>
-					<span id="input-field">
-						<input type="text" id="task-field" onChange={this.handleChange}/>
-						<button id="submit-btn">Submit</button>
-					</span>
-					<div className="new-task-btns">
-						<label htmlFor="proj-sel">Project:</label>
-						<select name="proj-sel" id="proj-sel-menu">
-							{projList}
-						</select>		
-						<label htmlFor="task-submit-date">Due Date:</label>
-						<input type="date" name="task-submit-date" id="task-submit-date"/>
-					</div>
-					
-				</form>
-				<Overview 
-					tasks={tasksInProject} 
-					projects={this.state.projects}
-					selProjName={projName}		
-					editedTask={this.state.editedTask}
-					delhandler={this.handleDelete} 
-					edithandler={this.handleTaskEdit} 
-					checkhandler={this.handleCheck}
-				/>
-			</div>			
+			<Container>
+				<div className="content">				
+					<form onSubmit={this.handleSubmit}>
+						<span id="input-field">
+							<input type="text" id="task-field" onChange={this.handleChange}/>
+							<button id="submit-btn">Submit</button>
+						</span>
+						<div className="new-task-btns">
+							<label htmlFor="proj-sel">Project:</label>
+							<select name="proj-sel" id="proj-sel-menu">
+								{projList}
+							</select>		
+							<label htmlFor="task-submit-date">Due Date:</label>
+							<input type="date" name="task-submit-date" id="task-submit-date"/>
+						</div>
+						
+					</form>
+					<Overview 
+						tasks={tasksInProject} 
+						projects={this.state.projects}
+						selProjName={projName}		
+						editedTask={this.state.editedTask}
+						delhandler={this.handleDelete} 
+						edithandler={this.handleTaskEdit} 
+						checkhandler={this.handleCheck}
+					/>
+				</div>
+			</Container>			
 		</div>
 		);
   	}

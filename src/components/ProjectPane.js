@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ProjectItem from './ProjectItem';
-import './projectpane.css';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+// import './projectpane.css';
 
 class ProjectPane extends Component {	
 	render(){
@@ -13,7 +15,8 @@ class ProjectPane extends Component {
 		/>);
 
 		return(
-			<div className="side-pane">
+			// <div className="side-pane">
+			<List>
 				<div className="proj-controls-wrapper">
 					<div className="proj-btns">
 						<button 
@@ -31,8 +34,8 @@ class ProjectPane extends Component {
 								Delete
 						</button>
 					</div>
-					<div className="proj-input-wrapper">
-						<form onSubmit={this.props.newprojsubmithandler}>
+					<div className="proj-input-wrapper" style={{display:this.props.newProjInput ? "block" : "none"}}>
+						<form onSubmit={this.props.newprojsubmithandler} >
 							<input type="text" name="proj-name" id="proj-name-input"/>
 							<button type="submit" id="proj-submit-btn">Submit</button>
 						</form>
@@ -40,18 +43,19 @@ class ProjectPane extends Component {
 				</div>
 				<div className="proj-list-wrapper">
 					<ul className="proj-list">
-						<li 
+						<ListItem 
 							className="project-item" 
 							key="all" 
 							id="all" 
 							onClick={this.props.projSelHandler}
 						>
 								All
-						</li>
+						</ListItem>
 						{projList}
 					</ul>
-				</div>				
-			</div>
+				</div>	
+			</List>			
+			// </div>
 		)
 	}
 }
