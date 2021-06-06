@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
+
 import ProjectItem from './ProjectItem';
 import List from '@material-ui/core/List';
+
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import TextField from '@material-ui/core/TextField';
+
+import DeleteIcon from '@material-ui/icons/Delete';
+import AddIcon from '@material-ui/icons/Add';
+import CheckIcon from '@material-ui/icons/Check';
 // import './projectpane.css';
 
 class ProjectPane extends Component {	
@@ -18,26 +28,45 @@ class ProjectPane extends Component {
 			<div className="side-pane">
 			
 				<div className="proj-controls-wrapper">
-					<div className="proj-btns">
-						<button 
-							type="button" 
-							id="new-proj-btn" 
+					<ButtonGroup className="proj-btns">
+						<Button 
+							variant="contained"
+							color="primary"
+							startIcon={<AddIcon/>}
+							id="new-proj-btn" 	
+							disabled={this.props.newProjInput}						
 							onClick={this.props.newprojhandler}
 						>
 							New Project
-						</button>
+						</Button>
 						
-						<button type="button" 
+						<Button 
+							variant="contained"
+							color="secondary"
+							startIcon={<DeleteIcon/>}
 							id="del-proj-btn" 
-							disabled={this.props.delEnabled}
+							disabled={!this.props.delEnabled}
 							onClick={this.props.projdelhandler}>
 								Delete
-						</button>
-					</div>
+						</Button>
+					</ButtonGroup>
 					<div className="proj-input-wrapper" style={{display:this.props.newProjInput ? "block" : "none"}}>
 						<form onSubmit={this.props.newprojsubmithandler} >
-							<input type="text" name="proj-name" id="proj-name-input"/>
-							<button type="submit" id="proj-submit-btn">Submit</button>
+
+							<TextField 
+								type="text" 
+								id="proj-name-input" 
+								color="secondary" 
+								placeholder="Project name" 
+								required={true} 
+								variant="outlined"
+							/>
+							<IconButton 
+								type="submit" 
+								id="proj-submit-btn"
+							>
+								<CheckIcon/>		
+							</IconButton>
 						</form>
 					</div>
 				</div>

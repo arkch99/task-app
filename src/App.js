@@ -16,7 +16,7 @@ class App extends Component {
 				{id:"default", name:"Unclassified"}], 
 			selectedProj: "default",
 			typedVal: "",
-			delEnabled: true,
+			delEnabled: false,
 			editedTask: "none",
 			editedProject: "none",
 			newProjInput: false
@@ -134,25 +134,26 @@ class App extends Component {
 
 	handleProjSel(event){
 		console.log("Project clicked!");
-		const projId = event.target.id;		
+		const projId = event.currentTarget.id;		
 		console.log(`Name: ${event.target.textContent}\nid: ${projId}`);
 		this.setState({
 			selectedProj: projId
 		});
 		if(projId === "default" || projId === "all"){ // prevent deletion of unclassified and all
 			this.setState({
-				delEnabled: true
+				delEnabled: false
 			});
 		}
 		else{
 			this.setState({
-				delEnabled: false
+				delEnabled: true
 			});
 		}
 	}
 
 	handleNewProj(event){
-		event.target.disabled = true;
+		// event.currentTarget.disabled = true;
+		// document.getElementById("new-proj-btn").disabled = true;
 		this.setState({
 			newProjInput: true
 		});
@@ -191,17 +192,20 @@ class App extends Component {
 		this.setState({
 			tasks: taskArr,
 			projects: newProjArr,
-			selectedProj: "default"
+			selectedProj: "default",
+			delEnabled: false
 		});
 		
 	}
 
 	handleProjEdit(event){
-		const editedProject = event.target.value;		
+		const editedProject = event.currentTarget.value;		
 		// const mode = {"Save":false, "Edit":true};
-		const btnText = event.target.textContent;
-
-		if(btnText === "Edit"){
+		//const btnText = event.target.textContent;
+		console.log("editedProject: " + editedProject);
+		console.log(event);
+		if(this.state.editedProject === "none")//if(btnText === "Edit")
+		{
 			this.setState({
 				editedProject: editedProject
 			});

@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import ListItem from '@material-ui/core/ListItem';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import SaveIcon from '@material-ui/icons/Save';
 // import './projectpane.css';
 
 class ProjectItem extends Component{
@@ -18,14 +21,14 @@ class ProjectItem extends Component{
 			
 			{this.props.project.name}
 			
-			<button 
-				type="button" 
+			<IconButton
 				value={this.props.project.id} 				
+				className="proj-edit-btn"
 				onClick={this.props.edithandler}
 				style={{display:((this.props.project.id === "default" || this.props.project.id === "all")? "none":"block")}}
 			>
-					{editOrSave}
-			</button>
+					{editOrSave === "Edit" ? <EditIcon/> : <SaveIcon/>}
+			</IconButton>
 		</ListItem>);
 	}
 }
