@@ -11,7 +11,9 @@ class App extends Component {
 		super();
 		this.state = {
 			tasks: [],
-			projects:[{id:"default", name:"Unclassified"}], 
+			projects:[
+				{id:"all", name:"All"},
+				{id:"default", name:"Unclassified"}], 
 			selectedProj: "default",
 			typedVal: "",
 			delEnabled: true,
@@ -237,6 +239,7 @@ class App extends Component {
 				<Drawer variant="permanent" open={true}>					
 					<ProjectPane 
 						projects={this.state.projects}
+						selectedProj={this.state.selectedProj}
 						projSelHandler={this.handleProjSel} 
 						newprojhandler={this.handleNewProj}
 						newprojsubmithandler={this.handleNewProjSubmit}

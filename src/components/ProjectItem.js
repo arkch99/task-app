@@ -8,21 +8,21 @@ class ProjectItem extends Component{
 		return ( 
 		<ListItem		
 			key={this.props.project.id} 
-			className="todo-item"		
-			
+			id={this.props.project.id} 								
+			className="project-item"		
+			selected={this.props.isSelected}
+			button={true}
+			onClick={this.props.projSelHandler}
+			contentEditable={this.props.edit}
 		>			
-			<span 
-				id={this.props.project.id} 				
-				onClick={this.props.projSelHandler}
-				contentEditable={this.props.edit}
-			>
-				{this.props.project.name}
-			</span>
+			
+			{this.props.project.name}
+			
 			<button 
 				type="button" 
 				value={this.props.project.id} 				
 				onClick={this.props.edithandler}
-				style={{display:(this.props.project.id === "default" ? "none":"block")}}
+				style={{display:((this.props.project.id === "default" || this.props.project.id === "all")? "none":"block")}}
 			>
 					{editOrSave}
 			</button>

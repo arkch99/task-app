@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ProjectItem from './ProjectItem';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 // import './projectpane.css';
 
 class ProjectPane extends Component {	
@@ -11,12 +10,13 @@ class ProjectPane extends Component {
 			project={project} 
 			projSelHandler={this.props.projSelHandler} 
 			edithandler={this.props.projEditHandler} 
+			isSelected={this.props.selectedProj === project.id}
 			edit={(project.id === this.props.editedProject) && (project.id !== "none")} 
 		/>);
 
 		return(
-			// <div className="side-pane">
-			<List>
+			<div className="side-pane">
+			
 				<div className="proj-controls-wrapper">
 					<div className="proj-btns">
 						<button 
@@ -41,21 +41,12 @@ class ProjectPane extends Component {
 						</form>
 					</div>
 				</div>
-				<div className="proj-list-wrapper">
-					<ul className="proj-list">
-						<ListItem 
-							className="project-item" 
-							key="all" 
-							id="all" 
-							onClick={this.props.projSelHandler}
-						>
-								All
-						</ListItem>
-						{projList}
-					</ul>
+			<List>
+				<div className="proj-list-wrapper">					
+						{projList}					
 				</div>	
 			</List>			
-			// </div>
+			</div>
 		)
 	}
 }
