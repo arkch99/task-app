@@ -1,4 +1,13 @@
 import React, { Component } from 'react';
+import IconButton from '@material-ui/core/IconButton';
+import ListItem from '@material-ui/core/ListItem';
+import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import CheckIcon from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
 import './tasklist.css';
 
 class TaskItem extends Component{
@@ -9,28 +18,26 @@ class TaskItem extends Component{
 		};
 
 		const editDisplay = !this.props.edit ? "none": "block";
-		const editOrSave = !this.props.edit ? "Edit": "Save";
 		const today = new Date().toISOString().slice(0, 10);		
 		const isOverDue = this.props.task.dueDate < today;
 		
 		return (
-		<span key={this.props.task.id} className="todo-item">
-			<input 
-				type="checkbox" 
-				value={this.props.task.id} 
-				onClick={this.props.checkhandler} 
-				checked={this.props.task.done?true:false}
-			
-			/>
-			<li 
+		<span key={this.props.task.id} className="todo-item">			
+			<ListItem 
 				id={this.props.task.id} 
-				key={this.props.task.id} 
+				key={this.props.task.id} 				
+				button={true}
 				style={{textDecoration: strikethrough[this.props.task.done]}}
 			>
+				<Checkbox 
+					value={this.props.task.id} 
+					onClick={this.props.checkhandler} 
+					checked={this.props.task.done?true:false}			
+				/>
 				<span className="task-number">{`${this.props.taskNo}:`}</span> 
-				<span className="task-text">{`${this.props.task.text}`}</span>
+				<span className="task-text" contentEditable={this.props.edit}>{`${this.props.task.text}`}</span>
 				<span className={isOverDue ? "task-date-due" : "task-date-ok"}>{this.props.task.dueDate}</span>
-			</li>
+			</ListItem>
 			<div 
 				className="proj-edit-wrapper" 
 				id={`${this.props.task.id}-proj-edit-wrapper`}
@@ -38,22 +45,30 @@ class TaskItem extends Component{
 			>
 
 				<label htmlFor="proj-edit-sel">Project:</label>
-				<select name="proj-edit-sel" id={`${this.props.task.id}-proj-edit-sel-menu`}>
+				<Select 
+					name="proj-edit-sel" 
+					id={`${this.props.task.id}-proj-edit-sel-menu`}
+					defaultValue={this.props.task.projectId}
+					onChange={this.props.projEditHandler}
+				>
 					{this.props.projList}
-				</select>
+				</Select>
 			</div>
-			<button 
-				type="button" 
+			<ButtonGroup className="task-edit-btns">
+				<IconButton 
+					value={this.props.task.id} 
+					onClick={this.props.edithandler}
+				>
+					{this.props.edit ? <CheckIcon/> : <EditIcon/>}
+				</IconButton>
+				<IconButton style={{display: this.props.edit ? "block" : "none"}}><CloseIcon/></IconButton>
+			</ButtonGroup>			
+			<IconButton 
 				value={this.props.task.id} 
-				onClick={this.props.edithandler}>
-					{editOrSave}
-			</button>
-			<button 
-				type="button" 
-				value={this.props.task.id} 
-				onClick={this.props.delhandler}>
-					Delete
-			</button>
+				onClick={this.props.delhandler}
+			>
+				<DeleteIcon/>
+			</IconButton>
 		</span>)
 	}
 }

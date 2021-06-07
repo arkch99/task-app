@@ -3,11 +3,12 @@ import ListItem from '@material-ui/core/ListItem';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
+import CloseIcon from '@material-ui/icons/Close';
+import { ButtonGroup } from '@material-ui/core';
 // import './projectpane.css';
 
 class ProjectItem extends Component{
 	render(){				
-		const editOrSave = !this.props.edit ? "Edit": "Save";
 		return ( 
 		<ListItem		
 			key={this.props.project.id} 
@@ -20,15 +21,19 @@ class ProjectItem extends Component{
 		>			
 			
 			{this.props.project.name}
-			
-			<IconButton
-				value={this.props.project.id} 				
-				className="proj-edit-btn"
-				onClick={this.props.edithandler}
-				style={{display:((this.props.project.id === "default" || this.props.project.id === "all")? "none":"block")}}
-			>
-					{editOrSave === "Edit" ? <EditIcon/> : <SaveIcon/>}
-			</IconButton>
+			<ButtonGroup>
+				<IconButton
+					value={this.props.project.id} 				
+					className="proj-edit-btn"
+					onClick={this.props.edithandler}
+					style={{display:((this.props.project.id === "default" || this.props.project.id === "all")? "none":"block")}}
+				>
+						{!this.props.edit ? <EditIcon/> : <SaveIcon/>}
+				</IconButton>
+				<IconButton style={{display: this.props.edit ? "block" : "none"}}>
+					<CloseIcon/>
+				</IconButton>
+			</ButtonGroup>
 		</ListItem>);
 	}
 }

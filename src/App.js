@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 import Overview from "./components/TaskList";
 import ProjectPane from "./components/ProjectPane";
+
 import "./index.css";
+
 import Container from '@material-ui/core/Container';
 import Drawer from '@material-ui/core/Drawer';
+import Input from '@material-ui/core/Input';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+
 import uniqid from 'uniqid';
 
 class App extends Component {
@@ -18,6 +24,7 @@ class App extends Component {
 			typedVal: "",
 			delEnabled: false,
 			editedTask: "none",
+			changedProj: "none",
 			editedProject: "none",
 			newProjInput: false
 		}		
@@ -31,11 +38,12 @@ class App extends Component {
 		this.handleProjDel = this.handleProjDel.bind(this);
 		this.handleNewProjSubmit = this.handleNewProjSubmit.bind(this);
 		this.handleProjEdit = this.handleProjEdit.bind(this);
+		this.handleTaskProjChange =  this.handleTaskProjChange.bind(this);
 	}
 
 	handleDelete(event){
 		event.preventDefault();
-		const idToDelete = event.target.value;
+		const idToDelete = event.currentTarget.value;
 		const delPos = this.state.tasks.findIndex((task) => {
 			if(task.id === idToDelete){
 				return true;
@@ -56,7 +64,7 @@ class App extends Component {
 
 	handleSubmit(event){
 		const ip = document.getElementById("task-field");
-		const projId = document.getElementById("proj-sel-menu").value;
+		const projId = this.state.selectedProj === "all" ? "default" : this.state.selectedProj;//document.getElementById("proj-sel-menu").value;
 		const dueDate = document.getElementById("task-submit-date").value;
 		const newTask = {
 			id:uniqid(), 
@@ -77,34 +85,33 @@ class App extends Component {
 	}
 
 	handleTaskEdit(event){
-		const mode = {"Save":false, "Edit":true};
-		const btnText = {"Edit":"Save", "Save":"Edit"};		
-
-		const taskId = event.target.value;
-		const taskEle = document.getElementById(taskId);//.children[1]; // get the actual text, not the number
-		const buttonLabel = event.target.textContent; // what's on the edit button
-
-		taskEle.contentEditable = mode[buttonLabel];
-		event.target.textContent = btnText[buttonLabel]; // change text on edit/save button
+		const taskId = event.currentTarget.value;
+		const taskEle = document.getElementById(taskId).children[2]; // get the actual text, not the number		
 
 		console.log(typeof taskEle.contentEditable);
 		console.log(taskEle.contentEditable);
 
-		if(taskEle.contentEditable==='false'){ // if save button has been pressed
+		if(this.state.editedTask !== "none"){ // if save button has been pressed
 			console.log(`Save pressed on ${taskId}`);
 			const changedTaskPos = this.state.tasks.findIndex((task) => {return task.id === taskId});			
-			const newProj = document.getElementById(`${taskId}-proj-edit-sel-menu`).value;
-			console.log(newProj);
+			const editedTask = this.state.tasks[changedTaskPos];
+			// const newProj = document.getElementById(`${taskId}-proj-edit-sel-menu`).value;
+			const newProj = this.state.changedProj === "none" ? editedTask.projectId : this.state.changedProj;
+
+			console.log("newProj "+ newProj);
 			const changedTask = {
 				id: taskId,
 				projectId: newProj,
-				text: taskEle.textContent,				
+				done: false,
+				text: taskEle.textContent,	
+				dueDate: this.state.tasks[changedTaskPos].dueDate
 			};
 			
 			const newTaskArr = this.state.tasks.slice(0, changedTaskPos).concat(changedTask).concat(this.state.tasks.slice(changedTaskPos + 1));
 			this.setState({
 				tasks:newTaskArr,
-				editedTask: "none"
+				editedTask: "none",
+				changedProj: "none"	
 			});
 		}
 		else{
@@ -124,11 +131,19 @@ class App extends Component {
 			id: checkedTask.id,
 			projectId: checkedTask.projectId,
 			done: !checkedTask.done,
+			dueDate: checkedTask.dueDate,
 			text: checkedTask.text
 		};
 		const newTaskArr = this.state.tasks.slice(0, taskIndex).concat(newTask).concat(this.state.tasks.slice(taskIndex + 1));
 		this.setState({
 			tasks: newTaskArr
+		});
+	}
+
+	handleTaskProjChange(event, child){
+		const newProj = event.target.value;
+		this.setState({
+			changedProj: newProj
 		});
 	}
 
@@ -228,9 +243,10 @@ class App extends Component {
 	}
 
 	render(){
-		const projList = this.state.projects.map(proj => <option key={proj.id} value={proj.id}> {proj.name}</option>);
 		let tasksInProject = this.state.tasks;
 		let projName = "all";
+		const today = new Date().toISOString().slice(0, 10);
+
 		if(this.state.selectedProj !== "all"){
 			// console.log(this.state.projects);
 			tasksInProject = this.state.tasks.filter(task => {return task.projectId === this.state.selectedProj});			
@@ -259,16 +275,34 @@ class App extends Component {
 				<div className="content">				
 					<form onSubmit={this.handleSubmit}>
 						<span id="input-field">
-							<input type="text" id="task-field" onChange={this.handleChange}/>
-							<button id="submit-btn">Submit</button>
+							<TextField 
+								type="text" 
+								id="task-field" 
+								color="primary" 
+								variant="outlined" 
+								placeholder="Task title"
+								required={true}
+								onChange={this.handleChange}
+							/>
+							<Button 
+								type="submit"
+								id="submit-btn"
+								color="primary"
+								variant="contained"
+							>
+								Submit
+							</Button>
 						</span>
 						<div className="new-task-btns">
-							<label htmlFor="proj-sel">Project:</label>
-							<select name="proj-sel" id="proj-sel-menu">
-								{projList}
-							</select>		
 							<label htmlFor="task-submit-date">Due Date:</label>
-							<input type="date" name="task-submit-date" id="task-submit-date"/>
+							<Input 
+								type="date" 
+								name="task-submit-date" 
+								defaultValue={today}
+								id="task-submit-date"
+								color="secondary"
+								required={true}
+							/>
 						</div>
 						
 					</form>
@@ -280,6 +314,8 @@ class App extends Component {
 						delhandler={this.handleDelete} 
 						edithandler={this.handleTaskEdit} 
 						checkhandler={this.handleCheck}
+						defaultValue={today}
+						projEditHandler={this.handleTaskProjChange}
 					/>
 				</div>
 			</Container>			
