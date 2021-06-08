@@ -87,7 +87,7 @@ class App extends Component {
 	handleTaskEdit(event){
 		const taskId = event.currentTarget.value;
 		const taskEle = document.getElementById(taskId).children[2]; // get the actual text, not the number		
-
+		const dateEle = document.getElementById(`${taskId}-date-edit`);
 		console.log(typeof taskEle.contentEditable);
 		console.log(taskEle.contentEditable);
 
@@ -95,8 +95,8 @@ class App extends Component {
 			console.log(`Save pressed on ${taskId}`);
 			const changedTaskPos = this.state.tasks.findIndex((task) => {return task.id === taskId});			
 			const editedTask = this.state.tasks[changedTaskPos];
-			// const newProj = document.getElementById(`${taskId}-proj-edit-sel-menu`).value;
 			const newProj = this.state.changedProj === "none" ? editedTask.projectId : this.state.changedProj;
+			const newDate = dateEle.value;
 
 			console.log("newProj "+ newProj);
 			const changedTask = {
@@ -104,7 +104,7 @@ class App extends Component {
 				projectId: newProj,
 				done: false,
 				text: taskEle.textContent,	
-				dueDate: this.state.tasks[changedTaskPos].dueDate
+				dueDate: newDate
 			};
 			
 			const newTaskArr = this.state.tasks.slice(0, changedTaskPos).concat(changedTask).concat(this.state.tasks.slice(changedTaskPos + 1));
@@ -166,9 +166,7 @@ class App extends Component {
 		}
 	}
 
-	handleNewProj(event){
-		// event.currentTarget.disabled = true;
-		// document.getElementById("new-proj-btn").disabled = true;
+	handleNewProj(event){		
 		this.setState({
 			newProjInput: true
 		});
