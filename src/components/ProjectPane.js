@@ -11,9 +11,20 @@ import TextField from '@material-ui/core/TextField';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
 // import './projectpane.css';
 
 class ProjectPane extends Component {	
+	constructor(props){
+		super(props);
+		this.cancelHandlerInt = this.cancelHandlerInt.bind(this);
+	}
+
+	cancelHandlerInt(event){
+		document.getElementById("proj-name-input").value="";
+		this.props.cancelHandler(event);
+	}
+
 	render(){
 		const projList = this.props.projects.map((project) => <ProjectItem 
 			key={project.id} 
@@ -22,6 +33,7 @@ class ProjectPane extends Component {
 			edithandler={this.props.projEditHandler} 
 			isSelected={this.props.selectedProj === project.id}
 			edit={(project.id === this.props.editedProject) && (project.id !== "none")} 
+			cancelHandler={this.props.cancelHandler}
 		/>);
 
 		return(
@@ -61,12 +73,21 @@ class ProjectPane extends Component {
 								required={true} 
 								variant="outlined"
 							/>
-							<IconButton 
-								type="submit" 
-								id="proj-submit-btn"
-							>
-								<CheckIcon/>		
-							</IconButton>
+							<ButtonGroup className="proj-submit-controls">
+								<IconButton 
+									type="submit" 
+									id="proj-submit-btn"
+								>
+									<CheckIcon/>		
+								</IconButton>
+								<IconButton 
+									type="button" 
+									id="proj-clear-btn"
+									onClick={this.cancelHandlerInt}//{this.props.cancelHandler}
+								>
+									<CloseIcon/>		
+								</IconButton>
+							</ButtonGroup>
 						</form>
 					</div>
 				</div>

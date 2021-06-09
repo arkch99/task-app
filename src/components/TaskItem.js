@@ -15,14 +15,26 @@ import CloseIcon from '@material-ui/icons/Close';
 import './tasklist.css';
 
 class TaskItem extends Component{
+	constructor(props){
+		super(props);
+		this.cancelHandlerInt = this.cancelHandlerInt.bind(this);
+	}
+
+	cancelHandlerInt(event){
+		document.getElementById(`${this.props.task.id}-text-edit`).value = this.props.task.text;
+		document.getElementById(`${this.props.task.id}-date-edit`).value = this.props.task.dueDate;
+		document.getElementById(`${this.props.task.id}-proj-edit-sel-menu`).value = this.props.task.projectId;
+		this.props.cancelHandler(event);
+	}
+
 	render(){		
 		const strikethrough = {
 			true:"line-through",
 			false:"none"
 		};
 
-		const editDisplay = !this.props.edit ? "none": "block";
-		const dateDisplay = this.props.edit ? "none": "block";
+		const editDisplay = !this.props.edit ? "none": "block"; // controls if edit fields are displayed
+		const origDisplay = this.props.edit ? "none": "block"; // controls if original data elements are displayed
 		const today = new Date().toISOString().slice(0, 10);		
 		const isOverDue = this.props.task.dueDate < today;		
 		
@@ -37,22 +49,45 @@ class TaskItem extends Component{
 				<Checkbox 
 					value={this.props.task.id} 
 					onClick={this.props.checkhandler} 
-					checked={this.props.task.done?true:false}			
+					checked={this.props.task.done}	
+					disabled={this.props.edit}		
 				/>
+
 				<span className="task-number">{`${this.props.taskNo}:`}</span> 
-				<span className="task-text" contentEditable={this.props.edit}>{`${this.props.task.text}`}</span>
-				<span 
-					className={isOverDue ? "task-date-due" : "task-date-ok"} 
-					style={{display:dateDisplay}}
-				>
-					{this.props.task.dueDate}
+
+				<span className="task-text">
+					<span 						
+						style={{display:origDisplay}}
+					>
+						{`${this.props.task.text}`}
+					</span>
+					<span						
+						style={{display:editDisplay}}
+					>
+						<TextField 
+							type="text" 
+							id={`${this.props.task.id}-text-edit`}
+							variant="outlined" 
+							defaultValue={this.props.task.text}
+						/>
+					</span>
 				</span>
-				<TextField 
-					type="date" 
-					id={`${this.props.task.id}-date-edit`}
-					defaultValue={this.props.task.dueDate}
-					style={{display:editDisplay}}
-				/>
+
+				<span className="task-date">
+					<span 
+						className={isOverDue ? "task-date-due" : "task-date-ok"} 
+						style={{display:origDisplay}}
+					>
+						{this.props.task.dueDate}
+					</span>
+					<span style={{display:editDisplay}}>
+						<TextField 
+							type="date" 
+							id={`${this.props.task.id}-date-edit`}
+							defaultValue={this.props.task.dueDate}						
+						/>
+					</span>
+				</span>
 			</ListItem>
 			
 			<div 
@@ -76,10 +111,16 @@ class TaskItem extends Component{
 				<IconButton 
 					value={this.props.task.id} 
 					onClick={this.props.edithandler}
+					disabled={this.props.task.done}
 				>
 					{this.props.edit ? <CheckIcon/> : <EditIcon/>}
 				</IconButton>
-				<IconButton style={{display: this.props.edit ? "block" : "none"}}><CloseIcon/></IconButton>
+				<IconButton 
+					style={{display: this.props.edit ? "block" : "none"}}
+					onClick={this.cancelHandlerInt}//{this.props.cancelHandler}
+				>
+						<CloseIcon/>
+				</IconButton>
 			</ButtonGroup>			
 			<IconButton 
 				value={this.props.task.id} 

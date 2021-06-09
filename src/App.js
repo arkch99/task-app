@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import uniqid from 'uniqid';
+import { ButtonGroup } from "@material-ui/core";
 
 class App extends Component {
 	constructor(){
@@ -39,6 +40,8 @@ class App extends Component {
 		this.handleNewProjSubmit = this.handleNewProjSubmit.bind(this);
 		this.handleProjEdit = this.handleProjEdit.bind(this);
 		this.handleTaskProjChange =  this.handleTaskProjChange.bind(this);
+		this.handleCancel = this.handleCancel.bind(this);
+		this.handleTaskClear = this.handleTaskClear.bind(this);
 	}
 
 	handleDelete(event){
@@ -86,10 +89,10 @@ class App extends Component {
 
 	handleTaskEdit(event){
 		const taskId = event.currentTarget.value;
-		const taskEle = document.getElementById(taskId).children[2]; // get the actual text, not the number		
+		const taskEle = document.getElementById(`${taskId}-text-edit`);
 		const dateEle = document.getElementById(`${taskId}-date-edit`);
-		console.log(typeof taskEle.contentEditable);
-		console.log(taskEle.contentEditable);
+		//console.log(typeof taskEle.contentEditable);
+		//console.log(taskEle.contentEditable);
 
 		if(this.state.editedTask !== "none"){ // if save button has been pressed
 			console.log(`Save pressed on ${taskId}`);
@@ -97,13 +100,14 @@ class App extends Component {
 			const editedTask = this.state.tasks[changedTaskPos];
 			const newProj = this.state.changedProj === "none" ? editedTask.projectId : this.state.changedProj;
 			const newDate = dateEle.value;
+			const newTask = taskEle.value;
 
 			console.log("newProj "+ newProj);
 			const changedTask = {
 				id: taskId,
 				projectId: newProj,
 				done: false,
-				text: taskEle.textContent,	
+				text: newTask,	
 				dueDate: newDate
 			};
 			
@@ -212,19 +216,17 @@ class App extends Component {
 	}
 
 	handleProjEdit(event){
-		const editedProject = event.currentTarget.value;		
-		// const mode = {"Save":false, "Edit":true};
-		//const btnText = event.target.textContent;
+		const editedProject = event.currentTarget.value;				
 		console.log("editedProject: " + editedProject);
 		console.log(event);
-		if(this.state.editedProject === "none")//if(btnText === "Edit")
+		if(this.state.editedProject === "none")
 		{
 			this.setState({
 				editedProject: editedProject
 			});
 		}
 		else {
-			const newProjName = document.getElementById(editedProject).textContent;
+			const newProjName = document.getElementById(`${editedProject}-name-edit`).value;
 			const editedProjPosn = this.state.projects.findIndex((project => project.id === editedProject));
 			const newProj = {
 				id: editedProject,
@@ -238,6 +240,19 @@ class App extends Component {
 			console.log(this.state.projects);
 		}
 
+	}
+
+	handleCancel(event){
+		this.setState({
+			editedTask: "none",
+			editedProject: "none",
+			changedProj: "none",
+			newProjInput: false
+		});
+	}
+
+	handleTaskClear(event){
+		document.getElementById("task-field").value="";
 	}
 
 	render(){
@@ -266,6 +281,7 @@ class App extends Component {
 						editedProject={this.state.editedProject}
 						projEditHandler={this.handleProjEdit}
 						newProjInput = {this.state.newProjInput}
+						cancelHandler = {this.handleCancel}
 					/>
 				</Drawer>
 			</div>
@@ -282,14 +298,25 @@ class App extends Component {
 								required={true}
 								onChange={this.handleChange}
 							/>
-							<Button 
-								type="submit"
-								id="submit-btn"
-								color="primary"
-								variant="contained"
-							>
-								Submit
-							</Button>
+							<ButtonGroup>
+								<Button 
+									type="submit"
+									id="submit-btn"
+									color="primary"
+									variant="contained"
+								>
+									Submit
+								</Button>
+								<Button 
+									type="button"
+									id="clr-btn"
+									color="secondary"
+									variant="outlined"
+									onClick={this.handleTaskClear}
+								>
+									Clear
+								</Button>
+							</ButtonGroup>
 						</span>
 						<div className="new-task-btns">
 							<label htmlFor="task-submit-date">Due Date:</label>
@@ -314,6 +341,7 @@ class App extends Component {
 						checkhandler={this.handleCheck}
 						defaultValue={today}
 						projEditHandler={this.handleTaskProjChange}
+						cancelHandler={this.handleCancel}
 					/>
 				</div>
 			</Container>			

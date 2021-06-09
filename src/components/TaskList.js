@@ -19,6 +19,7 @@ class Overview extends Component {
 					delhandler={this.props.delhandler}
 					edit={task.id === this.props.editedTask}
 					projEditHandler={this.props.projEditHandler}
+					cancelHandler={this.props.cancelHandler}
 				/>
 			);
 		});
