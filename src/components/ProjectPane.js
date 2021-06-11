@@ -83,13 +83,13 @@ class ProjectPane extends Component {
 								<IconButton 
 									type="button" 
 									id="proj-clear-btn"
-									onClick={this.cancelHandlerInt}//{this.props.cancelHandler}
+									onClick={this.cancelHandlerInt}
 								>
 									<CloseIcon/>		
 								</IconButton>
 							</ButtonGroup>
 						</form>
-					</div>
+					</div>				
 				</div>
 			<List>
 				<div className="proj-list-wrapper">					
