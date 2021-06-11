@@ -27,6 +27,7 @@ class Overview extends Component {
 		this.handleFilterMenuClose = this.handleFilterMenuClose.bind(this);
 		this.handleFilterItemSel = this.handleFilterItemSel.bind(this);
 		this.filterTasks = this.filterTasks.bind(this);
+		this.sortTasks = this.sortTasks.bind(this);
 	}
 
 	handleSortMenu(event){		
@@ -90,6 +91,18 @@ class Overview extends Component {
 		}
 	}
 
+	sortTasks(task1, task2){		
+		if(this.state.selectedSort==="alph") {
+			return task1.text > task2.text;
+		}
+		else if(this.state.selectedSort==="date"){
+			return task2.dueDate < task1.dueDate;
+		}
+		else{
+			return false;
+		}
+	}
+
 
 	render(){	
 		let c = 1;
@@ -122,6 +135,7 @@ class Overview extends Component {
 
 		const taskItems = this.props.tasks
 		.filter(task => this.filterTasks(task))
+		.sort((task1, task2) => this.sortTasks(task1, task2))
 		.map((task) => {
 			return (
 				<TaskItem 
