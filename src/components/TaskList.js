@@ -18,7 +18,7 @@ class Overview extends Component {
 			selectedSort: "",
 			filterAnchor: null,
 			filterMenuOpen: false,
-			selectedFilter: "all",
+			selectedFilter: "All",
 		};
 		this.handleSortMenu = this.handleSortMenu.bind(this);
 		this.handleSortMenuClose = this.handleSortMenuClose.bind(this);
@@ -77,14 +77,14 @@ class Overview extends Component {
 	filterTasks(task){
 		const today = new Date().toISOString().slice(0, 10);		
 		const isOverDue = task.dueDate < today;
-		if(this.state.selectedFilter === "all"){
+		if(this.state.selectedFilter === "All"){
 			return true;
 		}
-		else if(this.state.selectedFilter === "done"){
+		else if(this.state.selectedFilter === "Done"){
 			return task.done;
 		}
-		else if(this.state.selectedFilter === "due"){
-			return !isOverDue && !task.done;
+		else if(this.state.selectedFilter === "Pending"){
+			return !isOverDue && !task.done; // skip tasks which have been completed
 		}
 		else{
 			return isOverDue && !task.done;
@@ -92,10 +92,13 @@ class Overview extends Component {
 	}
 
 	sortTasks(task1, task2){		
-		if(this.state.selectedSort==="alph") {
+		if(this.state.selectedSort === "A-Z") {
 			return task1.text > task2.text;
 		}
-		else if(this.state.selectedSort==="date"){
+		else if(this.state.selectedSort === "Z-A") {
+			return task1.text < task2.text;
+		}
+		else if(this.state.selectedSort === "Date"){
 			return task2.dueDate < task1.dueDate;
 		}
 		else{
@@ -112,8 +115,8 @@ class Overview extends Component {
 		
 		const sortAnchor = <Button startIcon={<SortIcon/>} onClick={this.handleSortMenu}>Sort</Button>;
 		const filterAnchor = <Button startIcon={<FilterListIcon/>} onClick={this.handleFilterMenu}>Filter</Button>;
-		const sorts = ["none", "alph", "date"];
-		const filters = ["all", "done", "due", "overdue"];
+		const sorts = ["None", "A-Z", "Z-A","Date"];
+		const filters = ["All", "Done", "Pending", "Overdue"];
 		const sortMenuItems = sorts.map(sortCrit => (
 			<MenuItem 
 				key={sortCrit} 
