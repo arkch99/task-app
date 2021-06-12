@@ -272,6 +272,7 @@ class App extends Component {
 				<Drawer variant="permanent" open={true}>					
 					<ProjectPane 
 						projects={this.state.projects}
+						tasks={this.state.tasks}
 						selectedProj={this.state.selectedProj}
 						projSelHandler={this.handleProjSel} 
 						newprojhandler={this.handleNewProj}

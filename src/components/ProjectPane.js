@@ -28,7 +28,8 @@ class ProjectPane extends Component {
 	render(){
 		const projList = this.props.projects.map((project) => <ProjectItem 
 			key={project.id} 
-			project={project} 
+			project={project}
+			nTasks={project.id === "all" ? this.props.tasks.length :this.props.tasks.filter(task => task.projectId === project.id).length}
 			projSelHandler={this.props.projSelHandler} 
 			edithandler={this.props.projEditHandler} 
 			isSelected={this.props.selectedProj === project.id}

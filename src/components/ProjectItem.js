@@ -35,7 +35,7 @@ class ProjectItem extends Component{
 					<TextField type="text" defaultValue={this.props.project.name} id={`${this.props.project.id}-name-edit`}/>
 				</span>
 				<span id={`${this.props.project.id}-name-display`} style={{display:nameDisplay}}>
-					{this.props.project.name}
+					{`${this.props.project.name} (${this.props.nTasks})`}
 				</span>
 			</span>
 			<ButtonGroup>

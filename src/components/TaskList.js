@@ -158,7 +158,6 @@ class Overview extends Component {
 
 		return (
 			<div>
-				<h1>Project '{this.props.selProjName}' selected</h1>
 				<ButtonGroup className="task-view-btns" variant="text">
 					{sortAnchor}				
 					<Menu 
@@ -177,6 +176,7 @@ class Overview extends Component {
 						{filterMenuItems}
 					</Menu>
 				</ButtonGroup>
+				<h1 id="n-task-display">{`Showing ${taskItems.length} of ${this.props.tasks.length} tasks`}</h1>
 				<ul className="todo-list">
 					{taskItems}
 				</ul>
