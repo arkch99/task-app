@@ -9,6 +9,8 @@ import Drawer from '@material-ui/core/Drawer';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import uniqid from 'uniqid';
 import { ButtonGroup } from "@material-ui/core";
@@ -27,8 +29,11 @@ class App extends Component {
 			editedTask: "none",
 			changedProj: "none",
 			editedProject: "none",
-			newProjInput: false
-		}		
+			newProjInput: false,
+			colourAnchor: null,
+			colourMenuOpen: false,
+			selectedColour: "yellow"
+		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleDelete = this.handleDelete.bind(this);
@@ -42,6 +47,9 @@ class App extends Component {
 		this.handleTaskProjChange =  this.handleTaskProjChange.bind(this);
 		this.handleCancel = this.handleCancel.bind(this);
 		this.handleTaskClear = this.handleTaskClear.bind(this);
+		this.handleColourMenu = this.handleColourMenu.bind(this);
+		this.handleColourMenuClose = this.handleColourMenuClose.bind(this);
+		this.handleColourSel = this.handleColourSel.bind(this);
 	}
 
 	handleDelete(event){
@@ -74,7 +82,8 @@ class App extends Component {
 			projectId: projId,
 			done: false,
 			dueDate: dueDate,
-			text:this.state.typedVal
+			text: this.state.typedVal,
+			colour: this.state.selectedColour
 		};
 		console.log(newTask);
 		
@@ -87,10 +96,12 @@ class App extends Component {
 		event.preventDefault();
 	}
 
-	handleTaskEdit(event){
+	handleTaskEdit(event, colour){
 		const taskId = event.currentTarget.value;
 		const taskEle = document.getElementById(`${taskId}-text-edit`);
 		const dateEle = document.getElementById(`${taskId}-date-edit`);
+
+		console.log(colour);
 		//console.log(typeof taskEle.contentEditable);
 		//console.log(taskEle.contentEditable);
 
@@ -108,7 +119,8 @@ class App extends Component {
 				projectId: newProj,
 				done: false,
 				text: newTask,	
-				dueDate: newDate
+				dueDate: newDate,
+				colour: colour
 			};
 			
 			const newTaskArr = this.state.tasks.slice(0, changedTaskPos).concat(changedTask).concat(this.state.tasks.slice(changedTaskPos + 1));
@@ -136,7 +148,8 @@ class App extends Component {
 			projectId: checkedTask.projectId,
 			done: !checkedTask.done,
 			dueDate: checkedTask.dueDate,
-			text: checkedTask.text
+			text: checkedTask.text,
+			colour: checkedTask.colour
 		};
 		const newTaskArr = this.state.tasks.slice(0, taskIndex).concat(newTask).concat(this.state.tasks.slice(taskIndex + 1));
 		this.setState({
@@ -255,13 +268,57 @@ class App extends Component {
 		document.getElementById("task-field").value="";
 	}
 
+	handleColourMenu(event){
+		this.setState({
+			colourAnchor: this.state.colourAnchor ? null : event.currentTarget,
+			colourMenuOpen: !this.state.colourMenuOpen
+		});
+	}
+
+	handleColourMenuClose(event){
+		this.setState({
+			colourAnchor: null,
+			colourMenuOpen: false
+		});
+	}
+
+	handleColourSel(event){
+		this.setState({
+			selectedColour: event.currentTarget.dataset.colourName,
+			colourMenuOpen: false,
+			colourAnchor: null
+		});
+	}
+
 	render(){
 		let tasksInProject = this.state.tasks;
 		let projName = "all";
 		const today = new Date().toISOString().slice(0, 10);
+		const colourAnchor = <Button onClick={this.handleColourMenu}>Priority</Button>;
+		const colours = ["red", "yellow", "green"];
+		const colourCodes = {
+			red: "#ff5252",
+			yellow: "#fff176",
+			green: "#b2ff59"
+		};
+		const colourText = {
+			red: "High",
+			yellow: "Medium",
+			green: "Low"
+		};
+		const colourItems = colours.map(colour =>(
+			<MenuItem
+				key={colour}
+				data-colour-name={colour}
+				onClick={this.handleColourSel}
+			>
+				<div className="colour-menu-item" style={{backgroundColor:colourCodes[colour]}}>
+					{colourText[colour]}
+				</div>
+			</MenuItem>
+		));
 
 		if(this.state.selectedProj !== "all"){
-			// console.log(this.state.projects);
 			tasksInProject = this.state.tasks.filter(task => {return task.projectId === this.state.selectedProj});			
 			projName = this.state.projects.find(proj => proj.id === this.state.selectedProj).name;
 		}
@@ -319,6 +376,7 @@ class App extends Component {
 								</Button>
 							</ButtonGroup>
 						</span>
+
 						<div className="new-task-btns">
 							<label htmlFor="task-submit-date">Due Date:</label>
 							<Input 
@@ -329,6 +387,15 @@ class App extends Component {
 								color="secondary"
 								required={true}
 							/>
+							{colourAnchor}
+							<Menu
+								anchorEl={this.state.colourAnchor}
+								open={this.state.colourMenuOpen}
+								onClose={this.handleColourMenuClose}
+							>
+								{colourItems}
+							</Menu>
+
 						</div>
 						
 					</form>

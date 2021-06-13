@@ -37,3 +37,10 @@ html{
 	/* justify-content: center; */
 	justify-content: flex-start;
 }
+
+.colour-menu-item{
+	height:30px;
+	width:70px;
+	text-align: center;
+	border: 1px solid black;
+}
