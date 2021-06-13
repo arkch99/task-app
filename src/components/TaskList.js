@@ -86,6 +86,15 @@ class Overview extends Component {
 		else if(this.state.selectedFilter === "Pending"){
 			return !isOverDue && !task.done; // skip tasks which have been completed
 		}
+		else if(this.state.selectedFilter === "Priority - High"){
+			return task.colour === "red";
+		}
+		else if(this.state.selectedFilter === "Priority - Medium"){
+			return task.colour === "yellow";
+		}
+		else if(this.state.selectedFilter === "Priority - Low"){
+			return task.colour === "green";
+		}
 		else{
 			return isOverDue && !task.done;
 		}
@@ -101,6 +110,10 @@ class Overview extends Component {
 		else if(this.state.selectedSort === "Date"){
 			return task2.dueDate < task1.dueDate;
 		}
+		else if(this.state.selectedSort === "Priority"){
+			const priorityValues = {red: 3, yellow:2, green:1};
+			return priorityValues[task2.colour] - priorityValues[task1.colour];
+		}
 		else{
 			return false;
 		}
@@ -115,8 +128,8 @@ class Overview extends Component {
 		
 		const sortAnchor = <Button startIcon={<SortIcon/>} onClick={this.handleSortMenu}>Sort</Button>;
 		const filterAnchor = <Button startIcon={<FilterListIcon/>} onClick={this.handleFilterMenu}>Filter</Button>;
-		const sorts = ["None", "A-Z", "Z-A","Date"];
-		const filters = ["All", "Done", "Pending", "Overdue"];
+		const sorts = ["None", "A-Z", "Z-A", "Date", "Priority"];
+		const filters = ["All", "Done", "Pending", "Overdue" , "Priority - High", "Priority - Medium", "Priority - Low"];
 		const sortMenuItems = sorts.map(sortCrit => (
 			<MenuItem 
 				key={sortCrit} 
