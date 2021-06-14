@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Overview from "./components/TaskList";
+import TaskList from "./components/TaskList";
 import ProjectPane from "./components/ProjectPane";
 
 import "./index.css";
@@ -399,7 +399,7 @@ class App extends Component {
 						</div>
 						
 					</form>
-					<Overview 
+					<TaskList 
 						tasks={tasksInProject} 
 						projects={this.state.projects}
 						selProjName={projName}		

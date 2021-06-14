@@ -9,7 +9,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 import "./tasklist.css";
 
-class Overview extends Component {	
+class TaskList extends Component {	
 	constructor(props){
 		super(props);
 		this.state = {
@@ -190,7 +190,7 @@ class Overview extends Component {
 					</Menu>
 				</ButtonGroup>
 				<h1 id="n-task-display">{`Showing ${taskItems.length} of ${this.props.tasks.length} tasks`}</h1>
-				<ul className="todo-list">
+ 				<ul className="todo-list">
 					{taskItems}
 				</ul>
 			</div>
@@ -198,4 +198,4 @@ class Overview extends Component {
 	}
 }
 
-export default Overview;
+export default TaskList;
