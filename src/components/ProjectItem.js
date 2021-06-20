@@ -21,6 +21,7 @@ class ProjectItem extends Component{
 	render(){	
 		const editDisplay = this.props.edit ? "block" : "none";
 		const nameDisplay = !this.props.edit ? "block" : "none";
+		const uneditableProjs = new Set(["all", "default","today", "week"]);
 		return ( 
 		<ListItem		
 			key={this.props.project.id} 
@@ -43,7 +44,7 @@ class ProjectItem extends Component{
 					value={this.props.project.id} 				
 					className="proj-edit-btn"
 					onClick={this.props.edithandler}
-					style={{display:((this.props.project.id === "default" || this.props.project.id === "all")? "none":"block")}}
+					style={{display:uneditableProjs.has(this.props.project.id) ? "none" : "block"}}
 				>
 						{!this.props.edit ? <EditIcon/> : <SaveIcon/>}
 				</IconButton>

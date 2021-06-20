@@ -4,7 +4,7 @@ import ProjectPane from "./components/ProjectPane";
 
 import "./index.css";
 
-import Container from '@material-ui/core/Container';
+// import Container from '@material-ui/core/Container';
 import Drawer from '@material-ui/core/Drawer';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
@@ -15,12 +15,17 @@ import MenuItem from '@material-ui/core/MenuItem';
 import uniqid from 'uniqid';
 import { ButtonGroup } from "@material-ui/core";
 
+import {parseISO, isThisWeek, isToday } from "date-fns";
+
+
 class App extends Component {
 	constructor(){
 		super();
 		this.state = {
 			tasks: [],
 			projects:[
+				{id:"today",name:"Today"},
+				{id:"week",name:"This week"},
 				{id:"all", name:"All"},
 				{id:"default", name:"Unclassified"}], 
 			selectedProj: "default",
@@ -50,7 +55,7 @@ class App extends Component {
 		this.handleColourMenu = this.handleColourMenu.bind(this);
 		this.handleColourMenuClose = this.handleColourMenuClose.bind(this);
 		this.handleColourSel = this.handleColourSel.bind(this);
-	}
+	}	
 
 	handleDelete(event){
 		event.preventDefault();
@@ -74,8 +79,9 @@ class App extends Component {
 	}
 
 	handleSubmit(event){
+		const specialProjs = new Set(["all", "today", "week"]);
 		const ip = document.getElementById("task-field");
-		const projId = this.state.selectedProj === "all" ? "default" : this.state.selectedProj;//document.getElementById("proj-sel-menu").value;
+		const projId = specialProjs.has(this.state.selectedProj) ? "default" : this.state.selectedProj;//document.getElementById("proj-sel-menu").value;
 		const dueDate = document.getElementById("task-submit-date").value;
 		const newTask = {
 			id:uniqid(), 
@@ -102,9 +108,7 @@ class App extends Component {
 		const dateEle = document.getElementById(`${taskId}-date-edit`);
 
 		console.log(colour);
-		//console.log(typeof taskEle.contentEditable);
-		//console.log(taskEle.contentEditable);
-
+		
 		if(this.state.editedTask !== "none"){ // if save button has been pressed
 			console.log(`Save pressed on ${taskId}`);
 			const changedTaskPos = this.state.tasks.findIndex((task) => {return task.id === taskId});			
@@ -163,15 +167,15 @@ class App extends Component {
 			changedProj: newProj
 		});
 	}
-
-	handleProjSel(event){
+	
+	handleProjSel(event){			
 		console.log("Project clicked!");
 		const projId = event.currentTarget.id;		
 		console.log(`Name: ${event.target.textContent}\nid: ${projId}`);
 		this.setState({
 			selectedProj: projId
 		});
-		if(projId === "default" || projId === "all"){ // prevent deletion of unclassified and all
+		if(projId === "default" || projId === "all" || projId === "today" || projId === "week"){ // prevent deletion of unclassified and all
 			this.setState({
 				delEnabled: false
 			});
@@ -291,11 +295,16 @@ class App extends Component {
 	}
 
 	render(){
+		
 		let tasksInProject = this.state.tasks;
 		let projName = "all";
-		const today = new Date().toISOString().slice(0, 10);
+		let nTaskMap = new Map();
+
+		const specialProjs = new Set(["all", "today", "week"]);
+		
 		const colourAnchor = <Button onClick={this.handleColourMenu}>Priority</Button>;
 		const colours = ["red", "yellow", "green"];
+
 		const colourCodes = {
 			red: "#ff5252",
 			yellow: "#fff176",
@@ -306,6 +315,7 @@ class App extends Component {
 			yellow: "Medium",
 			green: "Low"
 		};
+
 		const colourItems = colours.map(colour =>(
 			<MenuItem
 				key={colour}
@@ -317,19 +327,50 @@ class App extends Component {
 				</div>
 			</MenuItem>
 		));
-
-		if(this.state.selectedProj !== "all"){
-			tasksInProject = this.state.tasks.filter(task => {return task.projectId === this.state.selectedProj});			
-			projName = this.state.projects.find(proj => proj.id === this.state.selectedProj).name;
-		}
 		
+		if(this.state.selectedProj !== "all"){
+			if(!specialProjs.has(this.state.selectedProj)){//this.state.selectedProj !== "all"){
+				tasksInProject = this.state.tasks.filter(task => {return task.projectId === this.state.selectedProj});			
+				projName = this.state.projects.find(proj => proj.id === this.state.selectedProj).name;
+			}
+			else{
+				if(this.state.selectedProj === "today"){
+					tasksInProject = this.state.tasks.filter(task => {console.log(`parsed date: ${parseISO(task.dueDate)}`); return isToday(parseISO(task.dueDate))});
+					
+				}
+
+				else{
+					tasksInProject = this.state.tasks.filter(task => isThisWeek(parseISO(task.dueDate)));
+				}
+			}
+		}
+
+		this.state.projects.forEach(project => {
+			if(project.id === "all"){
+				nTaskMap.set(project.id, this.state.tasks.length);
+			}
+			else if(!specialProjs.has(project.id)){//project.id !== "today" && project.id !== "week"){
+				nTaskMap.set(project.id, this.state.tasks.filter(task => task.projectId === project.id).length);
+			}
+			else{ // today and week
+				if(project.id === "today")
+				{
+					nTaskMap.set("today", this.state.tasks.filter(task => isToday(parseISO(task.dueDate))).length);
+				}
+				else{
+					nTaskMap.set("week", this.state.tasks.filter(task => isThisWeek(parseISO(task.dueDate))).length);
+				}
+			}
+		});
+
 		return (
 		<div className="App">
-			<div className="side-pane-wrapper">
+			{/* <div className="side-pane-wrapper"> */}
 				<Drawer variant="permanent" open={true}>					
 					<ProjectPane 
 						projects={this.state.projects}
-						tasks={this.state.tasks}
+						//tasks={this.state.tasks}
+						nTaskMap={nTaskMap}
 						selectedProj={this.state.selectedProj}
 						projSelHandler={this.handleProjSel} 
 						newprojhandler={this.handleNewProj}
@@ -342,9 +383,10 @@ class App extends Component {
 						cancelHandler = {this.handleCancel}
 					/>
 				</Drawer>
-			</div>
-			<Container>
-				<div className="content">				
+			{/* </div> */}
+			<div className="content">
+			{/* <Container> */}
+								
 					<form onSubmit={this.handleSubmit}>
 						<span id="input-field">
 							<TextField 
@@ -382,10 +424,9 @@ class App extends Component {
 							<Input 
 								type="date" 
 								name="task-submit-date" 
-								defaultValue={today}
+								defaultValue={(new Date()).toISOString().slice(0, 10)}
 								id="task-submit-date"
 								color="secondary"
-								required={true}
 							/>
 							{colourAnchor}
 							<Menu
@@ -407,12 +448,13 @@ class App extends Component {
 						delhandler={this.handleDelete} 
 						edithandler={this.handleTaskEdit} 
 						checkhandler={this.handleCheck}
-						defaultValue={today}
+						defaultValue={(new Date()).toISOString()}
 						projEditHandler={this.handleTaskProjChange}
 						cancelHandler={this.handleCancel}
 					/>
-				</div>
-			</Container>			
+				
+			{/* </Container>	 */}
+		</div>		
 		</div>
 		);
   	}

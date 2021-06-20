@@ -25,11 +25,11 @@ class ProjectPane extends Component {
 		this.props.cancelHandler(event);
 	}
 
-	render(){
+	render(){				
 		const projList = this.props.projects.map((project) => <ProjectItem 
 			key={project.id} 
 			project={project}
-			nTasks={project.id === "all" ? this.props.tasks.length :this.props.tasks.filter(task => task.projectId === project.id).length}
+			nTasks={this.props.nTaskMap.get(project.id)}
 			projSelHandler={this.props.projSelHandler} 
 			edithandler={this.props.projEditHandler} 
 			isSelected={this.props.selectedProj === project.id}
@@ -93,7 +93,7 @@ class ProjectPane extends Component {
 					</div>				
 				</div>
 			<List>
-				<div className="proj-list-wrapper">					
+				<div className="proj-list-wrapper">	
 						{projList}					
 				</div>	
 			</List>			
