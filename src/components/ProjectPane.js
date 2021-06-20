@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import TextField from '@material-ui/core/TextField';
+import Divider from '@material-ui/core/Divider';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
@@ -18,6 +19,7 @@ class ProjectPane extends Component {
 	constructor(props){
 		super(props);
 		this.cancelHandlerInt = this.cancelHandlerInt.bind(this);
+		this.makeProjItem = this.makeProjItem.bind(this);
 	}
 
 	cancelHandlerInt(event){
@@ -25,17 +27,27 @@ class ProjectPane extends Component {
 		this.props.cancelHandler(event);
 	}
 
-	render(){				
-		const projList = this.props.projects.map((project) => <ProjectItem 
-			key={project.id} 
-			project={project}
-			nTasks={this.props.nTaskMap.get(project.id)}
-			projSelHandler={this.props.projSelHandler} 
-			edithandler={this.props.projEditHandler} 
-			isSelected={this.props.selectedProj === project.id}
-			edit={(project.id === this.props.editedProject) && (project.id !== "none")} 
-			cancelHandler={this.props.cancelHandler}
-		/>);
+	makeProjItem(project){
+		return (
+			<ProjectItem 
+				key={project.id} 
+				project={project}
+				nTasks={this.props.nTaskMap.get(project.id)}
+				projSelHandler={this.props.projSelHandler} 
+				edithandler={this.props.projEditHandler} 
+				isSelected={this.props.selectedProj === project.id}
+				edit={(project.id === this.props.editedProject) && (project.id !== "none")} 
+				cancelHandler={this.props.cancelHandler}
+			/>
+		);
+	}
+
+	render(){
+		const uneditableProjs = new Set(["all", "default","today", "week"]);
+		const groupedProjects = this.props.projects.filter(proj => uneditableProjs.has(proj.id)).map(this.makeProjItem);
+		const unGroupedProjects = this.props.projects.filter(proj => !uneditableProjs.has(proj.id)).map(this.makeProjItem);
+		
+		// const projList = this.props.projects.map((project) => this.makeProjItem);
 
 		return(
 			<div className="side-pane">
@@ -94,7 +106,9 @@ class ProjectPane extends Component {
 				</div>
 			<List>
 				<div className="proj-list-wrapper">	
-						{projList}					
+						{groupedProjects}
+						<Divider style={{marginTop:15, marginBottom:10}}/>
+						{unGroupedProjects}
 				</div>	
 			</List>			
 			</div>
