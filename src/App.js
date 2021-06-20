@@ -365,7 +365,7 @@ class App extends Component {
 
 		return (
 		<div className="App">
-			{/* <div className="side-pane-wrapper"> */}
+			<div className="side-pane-wrapper">
 				<Drawer variant="permanent" open={true}>					
 					<ProjectPane 
 						projects={this.state.projects}
@@ -383,10 +383,9 @@ class App extends Component {
 						cancelHandler = {this.handleCancel}
 					/>
 				</Drawer>
-			{/* </div> */}
+			</div>
 			<div className="content">
-			{/* <Container> */}
-								
+			{/* <Container> */}								
 					<form onSubmit={this.handleSubmit}>
 						<span id="input-field">
 							<TextField 

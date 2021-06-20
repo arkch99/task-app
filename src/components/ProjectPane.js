@@ -13,7 +13,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
-// import './projectpane.css';
+import './projectpane.css';
 
 class ProjectPane extends Component {	
 	constructor(props){
@@ -75,32 +75,33 @@ class ProjectPane extends Component {
 								Delete
 						</Button>
 					</ButtonGroup>
-					<div className="proj-input-wrapper" style={{display:this.props.newProjInput ? "block" : "none"}}>
+					<div className="proj-input-wrapper" style={{display:this.props.newProjInput ? "flex" : "none"}}>
 						<form onSubmit={this.props.newprojsubmithandler} >
-
-							<TextField 
-								type="text" 
-								id="proj-name-input" 
-								color="secondary" 
-								placeholder="Project name" 
-								required={true} 
-								variant="outlined"
-							/>
-							<ButtonGroup className="proj-submit-controls">
-								<IconButton 
-									type="submit" 
-									id="proj-submit-btn"
-								>
-									<CheckIcon/>		
-								</IconButton>
-								<IconButton 
-									type="button" 
-									id="proj-clear-btn"
-									onClick={this.cancelHandlerInt}
-								>
-									<CloseIcon/>		
-								</IconButton>
-							</ButtonGroup>
+							<div id="proj-input-contents">
+								<TextField 
+									type="text" 
+									id="proj-name-input" 
+									color="secondary" 
+									placeholder="Project name" 
+									required={true} 
+									variant="outlined"
+								/>
+								<ButtonGroup className="proj-submit-controls">
+									<IconButton 
+										type="submit" 
+										id="proj-submit-btn"
+									>
+										<CheckIcon/>		
+									</IconButton>
+									<IconButton 
+										type="button" 
+										id="proj-clear-btn"
+										onClick={this.cancelHandlerInt}
+									>
+										<CloseIcon/>		
+									</IconButton>
+								</ButtonGroup>
+							</div>
 						</form>
 					</div>				
 				</div>

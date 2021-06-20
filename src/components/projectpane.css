@@ -1,34 +1,40 @@
-.side-pane{
+.proj-btns{
 	display: flex;
-	align-content: stretch;			
-	border-right: 2px solid;
-	height: 100vw;	
-	flex-direction: column;		
+	width: 305px;
 }
 
-.proj-list-wrapper{
-	height: 100vw;
-}
-
-.proj-list{
-	flex-grow: 2;
-	
-}
-
-.proj-btns{		
-	display: flex;
-	flex-basis: 5%;
+.proj-btns > div{
 	flex-grow: 1;
-	/* border-bottom: 2px solid; */
-	justify-content: center;
-	align-content: center;
-}
+	align-items: stretch;
+	justify-items: stretch;
+} 
 
 .proj-btns button{
-	height: 60%;
+	/* width: 100%; */
+	flex-grow: 1;
 }
 
-.proj-controls-wrapper{
-	border-bottom: 2px solid;
+#proj-input-contents{
+	display: flex;
+	width: 100%;
+	flex-grow: 1;
+	justify-items: stretch;
 }
 
+#proj-input-contents div:first-child{
+	flex-grow: 2;
+}
+
+.proj-submit-controls{
+	flex-grow: 1;
+}
+
+#proj-name-input{
+	flex-grow: 2;
+}
+
+.proj-input-wrapper form{
+	width: 300px;
+	flex-grow: 1;
+	margin: 5px 0px 5px 5px;
+}
