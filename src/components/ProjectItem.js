@@ -6,8 +6,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CloseIcon from '@material-ui/icons/Close';
 import { ButtonGroup } from '@material-ui/core';
-// import './projectpane.css';
-class ProjectItem extends Component{
+import './projectitem.css';
+
+ class ProjectItem extends Component{
 	constructor(props){
 		super(props);
 		this.cancelHandlerInt = this.cancelHandlerInt.bind(this);
@@ -39,7 +40,7 @@ class ProjectItem extends Component{
 					{`${this.props.project.name} (${this.props.nTasks})`}
 				</span>
 			</span>
-			<ButtonGroup>
+			<ButtonGroup className="proj-edit-btns">
 				<IconButton
 					value={this.props.project.id} 				
 					className="proj-edit-btn"
