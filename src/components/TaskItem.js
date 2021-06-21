@@ -16,7 +16,7 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import './tasklist.css';
+import './taskitem.css';
 
 class TaskItem extends Component{
 	constructor(props){
@@ -108,6 +108,7 @@ class TaskItem extends Component{
 		<span key={this.props.task.id} className="todo-item">			
 			<ListItem 
 				id={this.props.task.id} 
+				className="todo-item-container"
 				key={this.props.task.id} 				
 				button={true}
 				style={{
@@ -157,56 +158,57 @@ class TaskItem extends Component{
 						/>
 					</span>
 				</span>
-
-				<div 
-				className="proj-edit-wrapper" 
-				id={`${this.props.task.id}-proj-edit-wrapper`}
-				style={{display:editDisplay}}
-				>
-					<InputLabel id="sel-proj-label" variant="outlined">Project</InputLabel>
-					<Select 
-						name="proj-edit-sel" 
-						id={`${this.props.task.id}-proj-edit-sel-menu`}
-						defaultValue={this.props.task.projectId}
-						labelId="sel-proj-label"
-						onChange={this.props.projEditHandler}
-						variant="outlined"
+				<div className="task-edit-wrapper">
+					<div 
+						className="proj-edit-wrapper" 
+						id={`${this.props.task.id}-proj-edit-wrapper`}
+						style={{display:editDisplay}}
 					>
-						{this.props.projList}
-					</Select>
-					{colourAnchor}
-					<Menu
-						anchorEl={this.state.colourAnchor}
-						open={this.state.colourMenuOpen && this.props.edit}
-						onClose={this.handleColourMenuClose}
-					>
-						{colourItems}
-					</Menu>
-				
-				</div>
+						<InputLabel id="sel-proj-label" variant="outlined">Project</InputLabel>
+						<Select 
+							name="proj-edit-sel" 
+							id={`${this.props.task.id}-proj-edit-sel-menu`}
+							defaultValue={this.props.task.projectId}
+							labelId="sel-proj-label"
+							onChange={this.props.projEditHandler}
+							variant="outlined"
+						>
+							{this.props.projList}
+						</Select>
+						{colourAnchor}
+						<Menu
+							anchorEl={this.state.colourAnchor}
+							open={this.state.colourMenuOpen && this.props.edit}
+							onClose={this.handleColourMenuClose}
+						>
+							{colourItems}
+						</Menu>
+					
+					</div>
 
-			<ButtonGroup className="task-edit-btns">
+				<ButtonGroup className="task-edit-btns">
+					<IconButton 
+						value={this.props.task.id} 
+						onClick={this.handTaskEditInt}//{this.props.edithandler}
+						disabled={this.props.task.done}
+					>
+						{this.props.edit ? <CheckIcon/> : <EditIcon/>}
+					</IconButton>
+					<IconButton 
+						style={{display: this.props.edit ? "block" : "none"}}
+						onClick={this.cancelHandlerInt}//{this.props.cancelHandler}
+					>
+							<CloseIcon/>
+					</IconButton>
+				</ButtonGroup>	
+
 				<IconButton 
 					value={this.props.task.id} 
-					onClick={this.handTaskEditInt}//{this.props.edithandler}
-					disabled={this.props.task.done}
+					onClick={this.props.delhandler}
 				>
-					{this.props.edit ? <CheckIcon/> : <EditIcon/>}
+					<DeleteIcon/>
 				</IconButton>
-				<IconButton 
-					style={{display: this.props.edit ? "block" : "none"}}
-					onClick={this.cancelHandlerInt}//{this.props.cancelHandler}
-				>
-						<CloseIcon/>
-				</IconButton>
-			</ButtonGroup>	
-
-			<IconButton 
-				value={this.props.task.id} 
-				onClick={this.props.delhandler}
-			>
-				<DeleteIcon/>
-			</IconButton>
+			</div>
 		</ListItem>			
 			
 		</span>)
