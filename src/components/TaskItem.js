@@ -16,6 +16,10 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Divider from '@material-ui/core/Divider';
+
+
+import { format, parseISO } from 'date-fns';
 import './taskitem.css';
 
 class TaskItem extends Component{
@@ -115,50 +119,55 @@ class TaskItem extends Component{
 					textDecoration: strikethrough[this.props.task.done],
 					backgroundColor: colourCodes[this.props.task.colour]
 				}}
-			>
+			>	
+				<span className="task-info">
 				<Checkbox 
 					value={this.props.task.id} 
 					onClick={this.props.checkhandler} 
 					checked={this.props.task.done}	
 					disabled={this.props.edit}		
 				/>
+				
+					<span className="task-number">{`${this.props.taskNo}:`}</span> 
 
-				<span className="task-number">{`${this.props.taskNo}:`}</span> 
-
-				<span className="task-text">
-					<span 						
-						style={{display:origDisplay}}
-					>
-						{`${this.props.task.text}`}
-					</span>
-					<span						
-						style={{display:editDisplay}}
-					>
-						<TextField 
-							type="text" 
-							id={`${this.props.task.id}-text-edit`}
-							variant="outlined" 
-							defaultValue={this.props.task.text}
-						/>
+					<span className="task-text">
+						<span 						
+							style={{display:origDisplay}}
+						>
+							{`${this.props.task.text}`}
+						</span>
+						<span						
+							style={{display:editDisplay}}
+						>
+							<TextField 
+								type="text" 
+								id={`${this.props.task.id}-text-edit`}
+								variant="outlined" 
+								defaultValue={this.props.task.text}
+							/>
+						</span>
 					</span>
 				</span>
+				
+				<div className="task-rhs-wrapper">
+					<span className="task-date">
+						<span 
+							className={isOverDue ? "task-date-due" : "task-date-ok"} 
+							style={{display:origDisplay}}
+						>
+							{format(parseISO(this.props.task.dueDate), "dd-MM-yyyy")}
+						</span>
 
-				<span className="task-date">
-					<span 
-						className={isOverDue ? "task-date-due" : "task-date-ok"} 
-						style={{display:origDisplay}}
-					>
-						{this.props.task.dueDate}
+						
+
+						<span style={{display:editDisplay}}>
+							<TextField 
+								type="date" 
+								id={`${this.props.task.id}-date-edit`}
+								defaultValue={this.props.task.dueDate}						
+							/>
+						</span>
 					</span>
-					<span style={{display:editDisplay}}>
-						<TextField 
-							type="date" 
-							id={`${this.props.task.id}-date-edit`}
-							defaultValue={this.props.task.dueDate}						
-						/>
-					</span>
-				</span>
-				<div className="task-edit-wrapper">
 					<div 
 						className="proj-edit-wrapper" 
 						id={`${this.props.task.id}-proj-edit-wrapper`}
@@ -186,6 +195,8 @@ class TaskItem extends Component{
 					
 					</div>
 
+				<Divider orientation="vertical" flexItem />
+				
 				<ButtonGroup className="task-edit-btns">
 					<IconButton 
 						value={this.props.task.id} 
@@ -200,14 +211,13 @@ class TaskItem extends Component{
 					>
 							<CloseIcon/>
 					</IconButton>
-				</ButtonGroup>	
-
-				<IconButton 
-					value={this.props.task.id} 
-					onClick={this.props.delhandler}
-				>
-					<DeleteIcon/>
-				</IconButton>
+					<IconButton 
+						value={this.props.task.id} 
+						onClick={this.props.delhandler}
+					>
+						<DeleteIcon/>
+					</IconButton>
+				</ButtonGroup>					
 			</div>
 		</ListItem>			
 			

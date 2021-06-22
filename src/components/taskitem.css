@@ -1,11 +1,27 @@
-.todo-item-container{
-	width: 100%;
-}
-
-.task-edit-wrapper{
+.todo-item-container{ 
 	display: flex;
 	width: 100%;
-	flex-grow: 1;
+	justify-content: space-between !important; 
+}
+
+.task-rhs-wrapper{ 
+	display: flex;
+	width: 40%;
+	/* flex-grow: 1; */
 	align-self: flex-end;
+	align-items: center;
 	justify-content: flex-end;
+}
+
+.task-info{
+	display: flex;
+	align-items: center;
+}
+
+.task-date{
+	margin-right: 15px;
+}
+
+.task-edit-btns{
+	margin-left: 10px;
 }

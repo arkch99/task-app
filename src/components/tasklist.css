@@ -1,5 +1,7 @@
 .todo-item{
 	display: flex;
+	width: 700px;
+	margin-bottom: 10px;
 }
 
 .todo-list{
