@@ -385,7 +385,8 @@ class App extends Component {
 				</Drawer>
 			</div>
 			<div className="content">
-			{/* <Container> */}								
+			{/* <Container> */}			
+				<div classNamw="new-task-wrapper">					
 					<form onSubmit={this.handleSubmit}>
 						<span id="input-field">
 							<TextField 
@@ -397,7 +398,7 @@ class App extends Component {
 								required={true}
 								onChange={this.handleChange}
 							/>
-							<ButtonGroup>
+							<ButtonGroup className="task-submit-btns">
 								<Button 
 									type="submit"
 									id="submit-btn"
@@ -418,7 +419,7 @@ class App extends Component {
 							</ButtonGroup>
 						</span>
 
-						<div className="new-task-btns">
+						<div className="date-priority-wrapper">
 							<label htmlFor="task-submit-date">Due Date:</label>
 							<Input 
 								type="date" 
@@ -435,10 +436,9 @@ class App extends Component {
 							>
 								{colourItems}
 							</Menu>
-
-						</div>
-						
+						</div>					
 					</form>
+				</div>
 					<TaskList 
 						tasks={tasksInProject} 
 						projects={this.state.projects}
