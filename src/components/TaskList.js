@@ -170,7 +170,7 @@ class TaskList extends Component {
 		});
 
 		return (
-			<div>
+			<div className="task-view-wrapper">
 				<ButtonGroup className="task-view-btns" variant="text">
 					{sortAnchor}				
 					<Menu 

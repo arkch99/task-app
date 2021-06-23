@@ -386,7 +386,7 @@ class App extends Component {
 			</div>
 			<div className="content">
 			{/* <Container> */}			
-				<div classNamw="new-task-wrapper">					
+				<div className="new-task-wrapper">					
 					<form onSubmit={this.handleSubmit}>
 						<span id="input-field">
 							<TextField 
