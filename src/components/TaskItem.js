@@ -102,14 +102,14 @@ class TaskItem extends Component{
 			</MenuItem>
 		));
 
-		const editDisplay = !this.props.edit ? "none": "block"; // controls if edit fields are displayed
-		const origDisplay = this.props.edit ? "none": "block"; // controls if original data elements are displayed
+		const editDisplay = !this.props.edit ? "none": "flex"; // controls if edit fields are displayed
+		const origDisplay = this.props.edit ? "none": "flex"; // controls if original data elements are displayed
 		const today = new Date().toISOString().slice(0, 10);		
 		const isOverDue = this.props.task.dueDate < today;		
 		const colourAnchor = <Button onClick={this.handleColourEditMenu}>Priority</Button>;
 
 		return (		
-		<span key={this.props.task.id} className="todo-item">			
+					
 			<ListItem 
 				id={this.props.task.id} 
 				className="todo-item-container"
@@ -120,32 +120,24 @@ class TaskItem extends Component{
 					backgroundColor: colourCodes[this.props.task.colour]
 				}}
 			>	
+			<span key={this.props.task.id} className="todo-item" style={{display:origDisplay}}>
 				<span className="task-info">
-				<Checkbox 
-					value={this.props.task.id} 
-					onClick={this.props.checkhandler} 
-					checked={this.props.task.done}	
-					disabled={this.props.edit}		
-				/>
+					<Checkbox 
+						value={this.props.task.id} 
+						onClick={this.props.checkhandler} 
+						checked={this.props.task.done}	
+						disabled={this.props.edit}		
+					/>
 				
 					<span className="task-number">{`${this.props.taskNo}:`}</span> 
 
 					<span className="task-text">
-						<span 						
+						{/* <span 						
 							style={{display:origDisplay}}
-						>
+						> */}
 							{`${this.props.task.text}`}
-						</span>
-						<span						
-							style={{display:editDisplay}}
-						>
-							<TextField 
-								type="text" 
-								id={`${this.props.task.id}-text-edit`}
-								variant="outlined" 
-								defaultValue={this.props.task.text}
-							/>
-						</span>
+						{/* </span> */}
+						
 					</span>
 				</span>
 				
@@ -153,75 +145,108 @@ class TaskItem extends Component{
 					<span className="task-date">
 						<span 
 							className={isOverDue ? "task-date-due" : "task-date-ok"} 
-							style={{display:origDisplay}}
+							// style={{display:origDisplay}}
 						>
 							{format(parseISO(this.props.task.dueDate), "dd-MM-yyyy")}
-						</span>
+						</span>						
+					</span>					
 
-						
-
-						<span style={{display:editDisplay}}>
-							<TextField 
-								type="date" 
-								id={`${this.props.task.id}-date-edit`}
-								defaultValue={this.props.task.dueDate}						
-							/>
-						</span>
-					</span>
-					<div 
-						className="proj-edit-wrapper" 
-						id={`${this.props.task.id}-proj-edit-wrapper`}
-						style={{display:editDisplay}}
-					>
-						<InputLabel id="sel-proj-label" variant="outlined">Project</InputLabel>
-						<Select 
-							name="proj-edit-sel" 
-							id={`${this.props.task.id}-proj-edit-sel-menu`}
-							defaultValue={this.props.task.projectId}
-							labelId="sel-proj-label"
-							onChange={this.props.projEditHandler}
-							variant="outlined"
-						>
-							{this.props.projList}
-						</Select>
-						{colourAnchor}
-						<Menu
-							anchorEl={this.state.colourAnchor}
-							open={this.state.colourMenuOpen && this.props.edit}
-							onClose={this.handleColourMenuClose}
-						>
-							{colourItems}
-						</Menu>
+					<Divider orientation="vertical" flexItem />
 					
-					</div>
+					<ButtonGroup className="task-edit-btns">
+						<IconButton 
+							value={this.props.task.id} 
+							onClick={this.handTaskEditInt}//{this.props.edithandler}
+							disabled={this.props.task.done}
+						>
+							<EditIcon/>
+						</IconButton>
 
-				<Divider orientation="vertical" flexItem />
+						<IconButton 
+							value={this.props.task.id} 
+							onClick={this.props.delhandler}
+						>
+							<DeleteIcon/>
+						</IconButton>
+					</ButtonGroup>					
+				</div>
+			</span>
+			{/* editable */}
+			<span key={`${this.props.task.id}-edit`} 
+				className="todo-item todo-item-editable" 
+				style={{display:editDisplay}}
+			>
+				<Checkbox 
+					value={this.props.task.id} 
+					onClick={this.props.checkhandler} 
+					checked={this.props.task.done}	
+					disabled={this.props.edit}		
+				/>
+				<div className="task-text-date-edit-wrapper">
+					<TextField 
+						type="text" 
+						id={`${this.props.task.id}-text-edit`}
+						variant="outlined" 
+						defaultValue={this.props.task.text}
+					/>
+					<TextField 
+						type="date" 
+						id={`${this.props.task.id}-date-edit`}
+						defaultValue={this.props.task.dueDate}						
+					/>
+				</div>
 				
-				<ButtonGroup className="task-edit-btns">
-					<IconButton 
-						value={this.props.task.id} 
-						onClick={this.handTaskEditInt}//{this.props.edithandler}
-						disabled={this.props.task.done}
+				<div 
+					className="proj-colour-edit-wrapper" 
+					id={`${this.props.task.id}-proj-edit-wrapper`}
+				>
+					<InputLabel id="sel-proj-label" variant="outlined">Project</InputLabel>
+					<Select 
+						name="proj-edit-sel" 
+						id={`${this.props.task.id}-proj-edit-sel-menu`}
+						defaultValue={this.props.task.projectId}
+						labelId="sel-proj-label"
+						onChange={this.props.projEditHandler}
+						variant="outlined"
 					>
-						{this.props.edit ? <CheckIcon/> : <EditIcon/>}
-					</IconButton>
-					<IconButton 
-						style={{display: this.props.edit ? "block" : "none"}}
-						onClick={this.cancelHandlerInt}//{this.props.cancelHandler}
+						{this.props.projList}
+					</Select>
+					{colourAnchor}
+					<Menu
+						anchorEl={this.state.colourAnchor}
+						open={this.state.colourMenuOpen && this.props.edit}
+						onClose={this.handleColourMenuClose}
 					>
-							<CloseIcon/>
-					</IconButton>
-					<IconButton 
-						value={this.props.task.id} 
-						onClick={this.props.delhandler}
-					>
-						<DeleteIcon/>
-					</IconButton>
-				</ButtonGroup>					
-			</div>
-		</ListItem>			
-			
-		</span>)
+						{colourItems}
+					</Menu>
+				</div>
+					<div className="task-rhs-wrapper">
+						<Divider orientation="vertical" flexItem />					
+						<ButtonGroup className="task-edit-btns">
+							<IconButton 
+								value={this.props.task.id} 
+								onClick={this.handTaskEditInt}							
+							>
+								<CheckIcon/>
+							</IconButton>
+							<IconButton 							
+								onClick={this.cancelHandlerInt}
+							>
+								<CloseIcon/>
+							</IconButton>
+							<IconButton 
+								value={this.props.task.id} 
+								onClick={this.props.delhandler}
+							>
+								<DeleteIcon/>
+							</IconButton>
+						</ButtonGroup>					
+					</div>				
+				{/* </div> */}
+			</span>
+		</ListItem>						
+		
+		)
 	}
 }
 

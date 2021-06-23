@@ -1,14 +1,25 @@
 .todo-item-container{ 
 	display: flex;
-	width: 100%;
+	/* flex-direction: column; */
+	margin-top: 10px !important;
+	width: 700px;
 	justify-content: space-between !important; 
+}
+
+.todo-item{
+	display: flex;
+	width: 700px;	
+	justify-content: space-between !important;
+}
+
+.todo-item-editable{
+	align-items: center;
 }
 
 .task-rhs-wrapper{ 
 	display: flex;
-	width: 40%;
+	/* width: 40%; */
 	/* flex-grow: 1; */
-	align-self: flex-end;
 	align-items: center;
 	justify-content: flex-end;
 }
@@ -24,4 +35,14 @@
 
 .task-edit-btns{
 	margin-left: 10px;
+}
+
+.task-text-date-edit-wrapper{
+	display: flex;
+	flex-direction: column;
+}
+
+.proj-colour-edit-wrapper{
+	display: flex;
+	flex-direction: column;
 }
