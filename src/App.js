@@ -14,6 +14,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import uniqid from 'uniqid';
 import { ButtonGroup } from "@material-ui/core";
+import '@fontsource/roboto';
 
 import {parseISO, isThisWeek, isToday } from "date-fns";
 
