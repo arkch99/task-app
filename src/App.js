@@ -367,7 +367,7 @@ class App extends Component {
 		return (
 		<div className="App">
 			<div className="side-pane-wrapper">
-				<Drawer variant="permanent" open={true}>					
+				<Drawer variant="permanent" open={true} className="side-pane">					
 					<ProjectPane 
 						projects={this.state.projects}
 						//tasks={this.state.tasks}
@@ -439,7 +439,6 @@ class App extends Component {
 							</Menu>
 						</div>					
 					</form>
-				</div>
 					<TaskList 
 						tasks={tasksInProject} 
 						projects={this.state.projects}
@@ -452,6 +451,8 @@ class App extends Component {
 						projEditHandler={this.handleTaskProjChange}
 						cancelHandler={this.handleCancel}
 					/>
+				</div>
+					
 				
 			{/* </Container>	 */}
 		</div>		
