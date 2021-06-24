@@ -4,7 +4,6 @@ import ProjectPane from "./components/ProjectPane";
 
 import "./index.css";
 
-// import Container from '@material-ui/core/Container';
 import Drawer from '@material-ui/core/Drawer';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
@@ -81,7 +80,7 @@ class App extends Component {
 	handleSubmit(event){
 		const specialProjs = new Set(["all", "today", "week"]);
 		const ip = document.getElementById("task-field");
-		const projId = specialProjs.has(this.state.selectedProj) ? "default" : this.state.selectedProj;//document.getElementById("proj-sel-menu").value;
+		const projId = specialProjs.has(this.state.selectedProj) ? "default" : this.state.selectedProj;
 		const dueDate = document.getElementById("task-submit-date").value;
 		const newTask = {
 			id:uniqid(), 
@@ -93,7 +92,7 @@ class App extends Component {
 		};
 		console.log(newTask);
 		
-		/* actually send data to Overview */		
+		/* actually send data to TaskList */		
 		this.setState(prevState => ({
 			tasks: [...prevState.tasks, newTask],
 			typedVal: ""
@@ -175,7 +174,7 @@ class App extends Component {
 		this.setState({
 			selectedProj: projId
 		});
-		if(projId === "default" || projId === "all" || projId === "today" || projId === "week"){ // prevent deletion of unclassified and all
+		if(projId === "default" || projId === "all" || projId === "today" || projId === "week"){ // prevent deletion of presets
 			this.setState({
 				delEnabled: false
 			});
@@ -339,7 +338,7 @@ class App extends Component {
 		));
 		
 		if(this.state.selectedProj !== "all"){
-			if(!specialProjs.has(this.state.selectedProj)){//this.state.selectedProj !== "all"){
+			if(!specialProjs.has(this.state.selectedProj)){
 				tasksInProject = this.state.tasks.filter(task => {return task.projectId === this.state.selectedProj});			
 				projName = this.state.projects.find(proj => proj.id === this.state.selectedProj).name;
 			}
@@ -359,7 +358,7 @@ class App extends Component {
 			if(project.id === "all"){
 				nTaskMap.set(project.id, this.state.tasks.length);
 			}
-			else if(!specialProjs.has(project.id)){//project.id !== "today" && project.id !== "week"){
+			else if(!specialProjs.has(project.id)){
 				nTaskMap.set(project.id, this.state.tasks.filter(task => task.projectId === project.id).length);
 			}
 			else{ // today and week
@@ -395,7 +394,6 @@ class App extends Component {
 				</Drawer>
 			</div>
 			<div className="content">
-			{/* <Container> */}			
 				<div className="new-task-wrapper">					
 					<form onSubmit={this.handleSubmit}>
 						<span id="input-field">
@@ -460,11 +458,8 @@ class App extends Component {
 						projEditHandler={this.handleTaskProjChange}
 						cancelHandler={this.handleCancel}
 					/>
-				</div>
-					
-				
-			{/* </Container>	 */}
-		</div>		
+				</div>				
+			</div>		
 		</div>
 		);
   	}

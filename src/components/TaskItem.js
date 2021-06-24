@@ -139,13 +139,8 @@ class TaskItem extends Component{
 				
 					<span className="task-number">{`${this.props.taskNo}:`}</span> 
 
-					<span className="task-text">
-						{/* <span 						
-							style={{display:origDisplay}}
-						> */}
-							{`${this.props.task.text}`}
-						{/* </span> */}
-						
+					<span className="task-text">						
+						{`${this.props.task.text}`}						
 					</span>
 				</span>
 				
@@ -153,7 +148,6 @@ class TaskItem extends Component{
 					<span className="task-date">
 						<span 
 							className={isOverDue ? "task-date-due" : "task-date-ok"} 
-							// style={{display:origDisplay}}
 						>
 							{format(parseISO(this.props.task.dueDate), "dd-MM-yyyy")}
 						</span>						
@@ -164,7 +158,7 @@ class TaskItem extends Component{
 					<ButtonGroup className="task-edit-btns">
 						<IconButton 
 							value={this.props.task.id} 
-							onClick={this.handTaskEditInt}//{this.props.edithandler}
+							onClick={this.handTaskEditInt}
 							disabled={this.props.task.done}
 						>
 							<EditIcon/>
@@ -228,29 +222,28 @@ class TaskItem extends Component{
 						{colourItems}
 					</Menu>
 				</div>
-					<div className="task-rhs-wrapper">
-						<Divider orientation="vertical" flexItem />					
-						<ButtonGroup className="task-edit-btns">
-							<IconButton 
-								value={this.props.task.id} 
-								onClick={this.handTaskEditInt}							
-							>
-								<CheckIcon/>
-							</IconButton>
-							<IconButton 							
-								onClick={this.cancelHandlerInt}
-							>
-								<CloseIcon/>
-							</IconButton>
-							<IconButton 
-								value={this.props.task.id} 
-								onClick={this.props.delhandler}
-							>
-								<DeleteIcon/>
-							</IconButton>
-						</ButtonGroup>					
-					</div>				
-				{/* </div> */}
+				<div className="task-rhs-wrapper">
+					<Divider orientation="vertical" flexItem />					
+					<ButtonGroup className="task-edit-btns">
+						<IconButton 
+							value={this.props.task.id} 
+							onClick={this.handTaskEditInt}							
+						>
+							<CheckIcon/>
+						</IconButton>
+						<IconButton 							
+							onClick={this.cancelHandlerInt}
+						>
+							<CloseIcon/>
+						</IconButton>
+						<IconButton 
+							value={this.props.task.id} 
+							onClick={this.props.delhandler}
+						>
+							<DeleteIcon/>
+						</IconButton>
+					</ButtonGroup>					
+				</div>				
 			</span>
 		</ListItem>						
 		

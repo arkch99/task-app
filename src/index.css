@@ -43,12 +43,6 @@ table {
 	border-spacing: 0;
 }
 
-/* .content{
-	margin-top: 60px;
-	margin-left: 160px;  Same as the width of the sidebar 
-  	padding: 0px 10px;
-} */
-
 html{
 	height:1vw;
 	font-family: "Roboto";
@@ -60,30 +54,23 @@ html{
 	width: 100%;
 	flex-wrap: nowrap;
 	align-items: stretch;
-	/* justify-content: center; */
 }
 
 
 .side-pane-wrapper{
-	/* flex-grow: 1; */
 	flex-shrink: 0;
 	height: 100%;
-	min-width: 320px;/*305px;*/
-	/* margin-left: -200px; */
-	/* align-items: flex-start; */
+	min-width: 320px;
 	align-content: flex-start;
 }
 
 .content{	
 	display: flex;
-	/* height: 1vw; */
 	flex-direction: column;
 	flex-grow: 2;
 	flex-shrink: 0;
-	/* min-width: 65%; */
 	flex-wrap: nowrap;
 	align-items: center;
-	/* justify-content: center; */
 	justify-content: flex-start;
 }
 

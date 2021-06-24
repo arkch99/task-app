@@ -45,9 +45,7 @@ class ProjectPane extends Component {
 	render(){
 		const uneditableProjs = new Set(["all", "default","today", "week"]);
 		const groupedProjects = this.props.projects.filter(proj => uneditableProjs.has(proj.id)).map(this.makeProjItem);
-		const unGroupedProjects = this.props.projects.filter(proj => !uneditableProjs.has(proj.id)).map(this.makeProjItem);
-		
-		// const projList = this.props.projects.map((project) => this.makeProjItem);
+		const unGroupedProjects = this.props.projects.filter(proj => !uneditableProjs.has(proj.id)).map(this.makeProjItem);		
 
 		return(
 			<div className="side-pane">

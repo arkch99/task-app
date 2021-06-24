@@ -122,8 +122,9 @@ class TaskList extends Component {
 
 	render(){	
 		let c = 1;
+		const reservedProjs = new Set(['today', 'week', 'all']);
 		const projList = this.props.projects
-		.filter(proj => proj.id !== "all")
+		.filter(proj => !reservedProjs.has(proj.id))
 		.map(proj => <MenuItem key={proj.id} value={proj.id}> {proj.name} </MenuItem>);
 		
 		const sortAnchor = <Button startIcon={<SortIcon/>} onClick={this.handleSortMenu}>
