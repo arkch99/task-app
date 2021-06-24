@@ -106,7 +106,15 @@ class TaskItem extends Component{
 		const origDisplay = this.props.edit ? "none": "flex"; // controls if original data elements are displayed
 		const today = new Date().toISOString().slice(0, 10);		
 		const isOverDue = this.props.task.dueDate < today;		
-		const colourAnchor = <Button onClick={this.handleColourEditMenu}>Priority</Button>;
+		const colourAnchor = <Button onClick={this.handleColourEditMenu}>
+			Priority:
+			<div className="colour-menu-item" style={{
+				backgroundColor: colourCodes[this.state.selectedColour],				
+				marginLeft: 10
+			}}>			
+				{colourText[this.state.selectedColour]}
+			</div>
+		</Button>;
 
 		return (		
 					

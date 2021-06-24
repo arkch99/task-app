@@ -88,9 +88,11 @@ html{
 }
 
 .colour-menu-item{
+	display: flex;
 	height:30px;
 	width:70px;
-	text-align: center;
+	align-items: center;
+	justify-content: center;
 	border: 1px solid black;
 }
 #input-field{
@@ -123,3 +125,4 @@ html{
 .side-pane{
 	min-width: 320px;
 }
+

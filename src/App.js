@@ -18,7 +18,6 @@ import '@fontsource/roboto';
 
 import {parseISO, isThisWeek, isToday } from "date-fns";
 
-
 class App extends Component {
 	constructor(){
 		super();
@@ -303,7 +302,6 @@ class App extends Component {
 
 		const specialProjs = new Set(["all", "today", "week"]);
 		
-		const colourAnchor = <Button onClick={this.handleColourMenu}>Priority</Button>;
 		const colours = ["red", "yellow", "green"];
 
 		const colourCodes = {
@@ -316,6 +314,17 @@ class App extends Component {
 			yellow: "Medium",
 			green: "Low"
 		};
+
+		const colourAnchor = <Button onClick={this.handleColourMenu} style={{marginLeft: 20}}>
+			Priority:
+			<div className="colour-menu-item" style={{
+				backgroundColor: colourCodes[this.state.selectedColour],				
+				marginLeft: 10
+			}}>			
+				{colourText[this.state.selectedColour]}
+			</div>
+		</Button>;
+		
 
 		const colourItems = colours.map(colour =>(
 			<MenuItem
