@@ -31,3 +31,9 @@ ul{
 	margin-bottom: 10px;
 	color: rgb(177, 176, 176);
 }
+
+.selected-menu-item{
+	margin-left: 15px;
+	margin-right: 5px;
+	color: grey;
+}

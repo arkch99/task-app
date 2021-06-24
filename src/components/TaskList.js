@@ -15,7 +15,7 @@ class TaskList extends Component {
 		this.state = {
 			sortAnchor: null,
 			sortMenuOpen: false,
-			selectedSort: "",
+			selectedSort: "None",
 			filterAnchor: null,
 			filterMenuOpen: false,
 			selectedFilter: "All",
@@ -126,10 +126,19 @@ class TaskList extends Component {
 		.filter(proj => proj.id !== "all")
 		.map(proj => <MenuItem key={proj.id} value={proj.id}> {proj.name} </MenuItem>);
 		
-		const sortAnchor = <Button startIcon={<SortIcon/>} onClick={this.handleSortMenu}>Sort</Button>;
-		const filterAnchor = <Button startIcon={<FilterListIcon/>} onClick={this.handleFilterMenu}>Filter</Button>;
+		const sortAnchor = <Button startIcon={<SortIcon/>} onClick={this.handleSortMenu}>
+			Sort:
+			<div className="selected-menu-item">{this.state.selectedSort}</div>
+		</Button>;
+		
+		const filterAnchor = <Button startIcon={<FilterListIcon/>} onClick={this.handleFilterMenu}>
+			Filter:
+			<div className="selected-menu-item">{this.state.selectedFilter}</div>
+		</Button>;
+
 		const sorts = ["None", "A-Z", "Z-A", "Date", "Priority"];
 		const filters = ["All", "Done", "Pending", "Overdue" , "Priority - High", "Priority - Medium", "Priority - Low"];
+
 		const sortMenuItems = sorts.map(sortCrit => (
 			<MenuItem 
 				key={sortCrit} 
@@ -139,6 +148,7 @@ class TaskList extends Component {
 				{sortCrit}
 			</MenuItem>
 		));
+		
 		const filterMenuItems = filters.map(filterCrit => (
 			<MenuItem 
 				key={filterCrit} 
